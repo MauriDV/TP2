@@ -10,12 +10,13 @@ import java.util.*;
 **/
 
 public class EstadoMolino implements AdversarySearchState {
-	private int[][] tablero;
+	private int[][] tablero;//simula el estado del tablero nineMensMorris
 	private int currentPlayer; //Jug1 = 1, Jug2= -1
-	private EstadoMolino parent;
-	private int fila=7;
-	private int col=7;
-
+	private EstadoMolino parent; //el padre del estado.
+	private int fila=7; //tamaño de filas
+	private int col=7;	//tamaño de columnas
+	private List<List<Integer>> vecinos; //Dada una columna retorna las posiciones vecinas
+										//de la ficha 
 	//Contructor de EstadoMolino para el Estado inicial
 	public EstadoMolino(){
 		//representa al jugador corriente que esta jugando
@@ -28,6 +29,8 @@ public class EstadoMolino implements AdversarySearchState {
 		}
 		parent=null;//para llevar quien es el padre del estado o 
 					//en todo caso que regla se aplico para generarlo.
+		//Seteo de vecinos de cada columna
+		//HACER !!! 	
 	}
 	//Constructor de la clase con parametros
 	//A partir de el se genera un nuevo estado.
@@ -58,9 +61,11 @@ public class EstadoMolino implements AdversarySearchState {
 	public boolean isMax(){
 		return (currentPlayer==1);
 	}
+	//retorna el tablero corriente
 	public int[][] getTablero(){
 		return tablero;
 	}
+	//retorna el jugador corriente
 	public int getPlayer(){
 		return currentPlayer;
 	}
@@ -73,8 +78,8 @@ public class EstadoMolino implements AdversarySearchState {
 		return eq;
 	}
 	//Retorna el estado del tablero en forma de String.
+	//con el jugador que esta jugando 
 	 public String toString() {
-
         String s = "\n\t  ---------------------------- \n\t";
         for (int f = 0; f < fila; f++) {
             for (int c = 0; c < c; c++) {
@@ -83,9 +88,29 @@ public class EstadoMolino implements AdversarySearchState {
             s = s + " | \n\t  ---------------------------- \n\t";
         }
         s = s + "   1   2   3   4   5   6   7\n";
-        s+="Player Corriente : "+currentPlayer;
+        if (currentPlayer==1)
+        	s+="Player 1 : "+currentPlayer;
+        if (currentPlayer==-1)
+        	s+="Player 2 : "+currentPlayer;
+        if (currentPlayer==0)
+        	s+="No hay jugadas "+currentPlayer;
         return s;
      }
+
+     //Retorna el valor de verdad si el estado parametro es un molino
+     //es molino si en la estructura del juego hay 3 mismas fichas alineadas
+     //vertical u horizontalmente y ademas las fichas son "vecinas".
+     public boolean esMolino(EstadoMolino s){
+     	return false;
+     }
+     //Seteo de vecinos de cada columna en una Lista de listas
+     //Se hacer solo una vez para saber que vecinos tiene cada columna
+     public void seteoDeVecinos(List<List<Integer>> vecinos){
+     	//
+     	List<Integer> vecino = new LinkedList<Integer>();
+     	
+     }
+
     //Retorna la regla Aplicada para llegar this.Estado 
     //O quien es el padre de este estado. 
 	public Object ruleApplied(){
