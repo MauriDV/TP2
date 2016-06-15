@@ -21,7 +21,7 @@ public class EstadoMolino implements AdversarySearchState {
 	//Contructor de EstadoMolino para el Estado inicial
 	public EstadoMolino(){
 		//representa al jugador corriente que esta jugando
-		currentPlayer=0;
+		currentPlayer=1;
 		nficha=0;//
 		//Inicializar Tablero con 0's
 		for (int f=0; f<fila;f++){
@@ -32,7 +32,9 @@ public class EstadoMolino implements AdversarySearchState {
 		parent=null;//para llevar quien es el padre del estado o 
 					//en todo caso que regla se aplico para generarlo.
 		//Seteo de vecinos de cada columna
-		//HACER !!! 	
+		//HACER !!!
+		vecinoCol= new LinkedList<Integer>();
+		vecinoFil= new LinkedList<Integer>(); 	
 	}
 	//Constructor de la clase con parametros
 	//A partir de el se genera un nuevo estado.
@@ -110,16 +112,48 @@ public class EstadoMolino implements AdversarySearchState {
      public int getNumFicha(){
      	return nficha;
      }
+     public List<Integer> vecinos(){
+     	return vecinoCol;
+     }
 
 
      //Seteo de vecinos de cada columna en una Lista de listas
      //Se hacer solo una vez para saber que vecinos tiene cada columna
-  //   public void seteoDeVecinos(){
-   	//
-    // 	vecinoCol.add()	
-      // 	vecino.add(0,)
-     	
-     //}
+    public void seteoDeVecinos(){
+   		//SETEO DE VECINOS POR COLUMNA
+   		//Para columna 0-- son vecinos
+     	vecinoCol.add(0,0);
+     	vecinoCol.add(0,3);
+     	vecinoCol.add(0,6);	
+     	//Para columna 1--
+     	vecinoCol.add(1,1);
+     	vecinoCol.add(1,3);
+     	vecinoCol.add(1,5);
+     	//Para columna 2--
+     	vecinoCol.add(2,2);
+    	vecinoCol.add(2,3);
+    	vecinoCol.add(2,4);
+    	//Para columna 3--Caso especial
+    	vecinoCol.add(3,0);
+    	vecinoCol.add(3,1);
+    	vecinoCol.add(3,2);
+    		//segunda parte
+    	vecinoCol.add(3,4);
+    	vecinoCol.add(3,5);
+    	vecinoCol.add(3,6);
+    	//Para columna 4
+    	vecinoCol.add(4,2);
+    	vecinoCol.add(4,3);
+    	vecinoCol.add(4,4);
+    	//Para columna 5
+    	vecinoCol.add(5,1);
+    	vecinoCol.add(5,3);
+    	vecinoCol.add(5,5);		
+    	//Para columna 6
+    	vecinoCol.add(6,0);
+    	vecinoCol.add(6,3);
+    	vecinoCol.add(6,6);
+    }
 
     //Retorna la regla Aplicada para llegar this.Estado 
     //O quien es el padre de este estado. 
