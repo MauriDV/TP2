@@ -15,12 +15,14 @@ public class EstadoMolino implements AdversarySearchState {
 	private EstadoMolino parent; //el padre del estado.
 	private int fila=7; //tamaño de filas
 	private int col=7;	//tamaño de columnas
-	private List<List<Integer>> vecinos; //Dada una columna retorna las posiciones vecinas
-										//de la ficha 
+	private List<Integer> vecinoCol; //Guarda por columna los vecinos
+	private List<Integer> vecinoFil; //Guarda por fila los vecinos
+	private int nficha;
 	//Contructor de EstadoMolino para el Estado inicial
 	public EstadoMolino(){
 		//representa al jugador corriente que esta jugando
 		currentPlayer=0;
+		nficha=0;//
 		//Inicializar Tablero con 0's
 		for (int f=0; f<fila;f++){
 			for(int c=0; c<col;c++){
@@ -40,6 +42,7 @@ public class EstadoMolino implements AdversarySearchState {
 		tablero[f][c]= jug;//Donde juega 
 		currentPlayer=jug; //Seteo quien hizo la jugada.		
 		parent=father;//Y de que estado provino.
+		nficha++;
 	}
 /*
 	//ESTAS SON PARA EL CONTROL DEL JUEGO, NO VAN AQUI
@@ -103,13 +106,20 @@ public class EstadoMolino implements AdversarySearchState {
      public boolean esMolino(EstadoMolino s){
      	return false;
      }
+     //retorna la cantida de fichas 
+     public int getNumFicha(){
+     	return nficha;
+     }
+
+
      //Seteo de vecinos de cada columna en una Lista de listas
      //Se hacer solo una vez para saber que vecinos tiene cada columna
-     public void seteoDeVecinos(List<List<Integer>> vecinos){
-     	//
-     	List<Integer> vecino = new LinkedList<Integer>();
+  //   public void seteoDeVecinos(){
+   	//
+    // 	vecinoCol.add()	
+      // 	vecino.add(0,)
      	
-     }
+     //}
 
     //Retorna la regla Aplicada para llegar this.Estado 
     //O quien es el padre de este estado. 
