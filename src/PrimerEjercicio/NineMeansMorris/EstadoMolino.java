@@ -15,8 +15,8 @@ public class EstadoMolino implements AdversarySearchState {
 	private EstadoMolino parent; //el padre del estado.
 	private int fila=7; //tamaño de filas
 	private int col=7;	//tamaño de columnas
-	private List<Integer> vecinoCol; //Guarda por columna los vecinos
-	private List<Integer> vecinoFil; //Guarda por fila los vecinos
+	private List<List<Integer>> vecinoCol; //Guarda por columna los vecinos
+	private List<List<Integer>> vecinoFil; //Guarda por fila los vecinos
 	private int nficha;
 	//Contructor de EstadoMolino para el Estado inicial
 	public EstadoMolino(){
@@ -112,28 +112,44 @@ public class EstadoMolino implements AdversarySearchState {
      public int getNumFicha(){
      	return nficha;
      }
-     public List<Integer> vecinos(){
+     //retorna la lista de los vecinos por columna
+     public List<List<Integer>> vecinosCol(){
      	return vecinoCol;
+     }
+     //Retorna la lista de vecinos por Fila
+     public List<List<Integer>> vecinosFil(){
+     	return vecinosFil;
      }
 
 
      //Seteo de vecinos de cada columna en una Lista de listas
      //Se hacer solo una vez para saber que vecinos tiene cada columna
     public void seteoDeVecinos(){
+   		//addAll(int index, Collection<? extends E> c)
+     	List<Integer> list = new LinkedList<Integer>();
    		//SETEO DE VECINOS POR COLUMNA
-   		//Para columna 0-- son vecinos
-     	vecinoCol.add(0,0);
-     	vecinoCol.add(0,3);
-     	vecinoCol.add(0,6);	
+   		//Para columna 0-- son vecinos    	
+    	
+     	/*list.add(0);
+     	list.add(3);
+     	list.add(6);
+     	vecinoCol.add(0,list);
+     	list.clear();
      	//Para columna 1--
-     	vecinoCol.add(1,1);
-     	vecinoCol.add(1,3);
-     	vecinoCol.add(1,5);
+     	list.add(1);
+     	list.add(3);
+     	list.add(5);
+     	vecinoCol.add(1,list);
+     	list.clear();
      	//Para columna 2--
-     	vecinoCol.add(2,2);
-    	vecinoCol.add(2,3);
-    	vecinoCol.add(2,4);
+     	list.add(2);
+     	list.add(3);
+     	list.add(4);
+     	vecinoCol.add(2,list);
+    	list.clear();
     	//Para columna 3--Caso especial
+    	list.add(0);
+    	
     	vecinoCol.add(3,0);
     	vecinoCol.add(3,1);
     	vecinoCol.add(3,2);
@@ -145,14 +161,19 @@ public class EstadoMolino implements AdversarySearchState {
     	vecinoCol.add(4,2);
     	vecinoCol.add(4,3);
     	vecinoCol.add(4,4);
+    	list.clear();
     	//Para columna 5
     	vecinoCol.add(5,1);
     	vecinoCol.add(5,3);
-    	vecinoCol.add(5,5);		
+    	vecinoCol.add(5,5);
+    	list.clear();		
     	//Para columna 6
     	vecinoCol.add(6,0);
     	vecinoCol.add(6,3);
     	vecinoCol.add(6,6);
+    	list.clear();
+    //Seteo de vecinos por fila.
+*/
     }
 
     //Retorna la regla Aplicada para llegar this.Estado 
