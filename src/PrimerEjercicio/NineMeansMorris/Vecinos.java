@@ -154,12 +154,15 @@ public class Vecinos {
 
 	//Dado un nodo jugado, correr DFS para ese nodo y buscar Molino
 	//en base a sus adyancentes horizontales y sus adyacentes verticales
-	public boolean esMolino(int nodo){
+	/*public boolean esMolino(int nodo){
 		List visited = new LinkedList<Integer>();
 		//Primera busqueda por horizontales.
 		int j=1;//Comienza con 1 ya que esa ficha recien coloca.
 		int search=10; //Para que primero haga analisis dfs por 10's u horizontales.
+		System.out.println("nodo "+nodo+" j "+j+ " search "+search);
+		System.out.println("VER Q PASA "+adyacencia[nodo][j]);
 		int i= dfs(nodo,j,visited,search);
+
 		visited.clear();
 		if (i==3) return true; //Hay molino por horizontales.
 		//Busqueda por Verticales
@@ -172,10 +175,65 @@ public class Vecinos {
 		
 		return false; //sino no hay molino
 	}
+*/
+	public boolean esMolino(int nodo,int jugador){ 
+		
+		List<Integer> visited = new LinkedList<Integer>();
+		int search=10; //Para que primero haga analisis dfs por 10's u horizontales.
+		int i= dfs(nodo,search,visited,1);
+		visited.clear();
+        if (i==3) return true;
+		//Analisis nodos verticales
+		search=20;
+		i=dfs(nodo,search,visited,1);
+		visited.clear();
+		if (i==3) return true;
+		return false;
+
+	}
+	/*
+1  método DFS( origen):
+2      creamos una pila S
+3      agregamos origen a la pila S
+4      marcamos origen como visitado
+5      mientras S no este vacío:
+6          sacamos un elemento de la pila S llamado v
+7          
+			
+		   para cada vertice w adyacente a v en el Grafo: 
+8              si w no ah sido visitado:
+9                 marcamos como visitado w
+10                 insertamos w dentro de la pila S
+
+
+	*/
+	public int dfs(int nodo, int search,List<Integer> visited,int jug){
+		   	Stack<Integer> pila = new Stack<Integer>();
+    		pila.push(nodo);//nodo origen
+    		pila.add(nodo);//visitado
+    		int count=0;
+    		while (count!=3 && !pila.isEmpty() ) {
+    				Integer current = pila.pop();//saco nodo de la pila
+    				if (fichaJug[current.intValue()]==jug){ //si la posicion coincide con el jugador (1 o 2)
+    					//la primera vez deberia coincidir
+    					count++;
+    				}
+    				for (int c=0; c < col ;c++ ) { //obtener los adyacentes
+    					if (adyacencia[current.intValue()][c]==search){ //busca por 10 horizontales o 20 verticales
+    						if ( !visited.contains ( (Integer) adyacencia[current.intValue()][c]) ) { //analisis si no fue visitado
+    							visited.add(adyacencia[current.intValue()][c]); //agregarlo a visitados
+    							pila.push(adyacencia[current.intValue()][c]);//agregarlo a la pila
+    						}
+	   					}		
+    				}
+			}
+   			return count;	
+  	}		
 
 
 	/*Recorrido dfs para la busqueda de molinos sobre la lista de adyancencias*/
-	private int dfs(int nodo,int count,List visited,int search){
+	//CAMBIARLO POR EL Q NO ES RECURSIVO
+	/*private int dfs(int nodo,int count,List visited,int search){
 		if (!visited.contains(nodo)){
 			visited.add(0,nodo);
 			if (count==3){ 
@@ -183,9 +241,13 @@ public class Vecinos {
 			}else{
 				List<Integer> adj = new LinkedList<Integer>();
 				//obtengo los adyancentes
-				for (int c=0;c < col ; c++) {
+				for (int c=0; c < col ; c++) {
+					System.out.println("");
+					System.out.println("NODO "+nodo+ " COL"+ col+ " Current c "+c);
+					System.out.print("");
 					//obtener los que son solo horizontales o verticales
 					//dependiendo de con quien lo llama a dfs.
+					System.out.println(" VALOR "+adyacencia[nodo][col]);
 					if (adyacencia[nodo][col]==search){
 						adj.add(col); 
 					}
@@ -206,7 +268,7 @@ public class Vecinos {
 		return count;
 	}
 
-
+*/
 	//toString de la clase.
 	 public String toString() {
         String s ="";// "\n\t  ---------------------------- \n\t";
@@ -214,8 +276,10 @@ public class Vecinos {
             for (int c = 0; c < col; c++) {
                s = s + " | "+adyacencia[f][c];
             }
+            s+=" | END FILA :"+f+"    " ;
             //s = s + " | \n\t  ---------------------------- \n\t";
         }
+        s+="| END COL";
         //s = s + "   1   2   3   4   5   6   7\n";
         return s;
      }
