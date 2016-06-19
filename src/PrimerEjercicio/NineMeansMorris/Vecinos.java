@@ -180,14 +180,15 @@ public class Vecinos {
 		
 		List<Integer> visited = new LinkedList<Integer>();
 		int search=10; //Para que primero haga analisis dfs por 10's u horizontales.
-		int i= dfs(nodo,search,visited,1);
+		//nodo=3,search=10,jug=1
+		int i= dfs(nodo,search,visited,jugador);
 		visited.clear();
         if (i==3) return true;
 		//Analisis nodos verticales
-		search=20;
-		i=dfs(nodo,search,visited,1);
-		visited.clear();
-		if (i==3) return true;
+		//search=20;
+		//i=dfs(nodo,search,visited,1);
+		//visited.clear();
+		//if (i==3) return true;
 		return false;
 
 	}
@@ -209,23 +210,43 @@ public class Vecinos {
 	*/
 	public int dfs(int nodo, int search,List<Integer> visited,int jug){
 		   	Stack<Integer> pila = new Stack<Integer>();
-    		pila.push(nodo);//nodo origen
-    		pila.add(nodo);//visitado
-    		int count=0;
-    		while (count!=3 && !pila.isEmpty() ) {
-    				Integer current = pila.pop();//saco nodo de la pila
+    		pila.push(nodo);//apilo nodo origen 
+    		visited.add(nodo);//marco visitado
+    		int count=0;//ok
+    		while (!pila.isEmpty() ) {
+    			if (count!=3){
+    				System.out.println("-------pila antes "+pila.toString());
+    				Integer current = pila.pop();//saco nodo de la pila ok
+    				System.out.println("------------ pila despues "+pila.toString());
+    				System.out.println("current "+current );//ok
+    				System.out.println("Jugador en array "+fichaJug[current.intValue()]);//ok
     				if (fichaJug[current.intValue()]==jug){ //si la posicion coincide con el jugador (1 o 2)
+    					
     					//la primera vez deberia coincidir
     					count++;
+    					System.out.println("Contando "+count);
+    					for (int c=0; c < col ;c++ ) { //obtener los adyacentes    							
+    						if (adyacencia[current.intValue()][c]==search){ //busca por 10 horizontales o 20 verticales
+    							System.out.println("Fila "+current.intValue());//ok
+    							System.out.println("adyacente "+ adyacencia[current.intValue()][c]+" y search "+search);
+    							if ( !visited.contains ( (Integer) c) ) { //analisis si no fue visitado "la columna"
+    								System.out.println("HIJOS "+c);//para ver q hay
+    								visited.add(c); //agregarlo a visitados
+    								pila.push(c);//agregarlo a la pila
+    								System.out.println("visitados toString "+visited.toString());
+
+    							}
+	   						}		
+    					}
     				}
-    				for (int c=0; c < col ;c++ ) { //obtener los adyacentes
-    					if (adyacencia[current.intValue()][c]==search){ //busca por 10 horizontales o 20 verticales
-    						if ( !visited.contains ( (Integer) adyacencia[current.intValue()][c]) ) { //analisis si no fue visitado
-    							visited.add(adyacencia[current.intValue()][c]); //agregarlo a visitados
-    							pila.push(adyacencia[current.intValue()][c]);//agregarlo a la pila
-    						}
-	   					}		
-    				}
+    			}
+    			else{
+    				//count ==3;
+    				return count;
+    			}	
+    			System.out.println("");
+    			System.out.println("FIN ITERACION");
+    			System.out.println("");			
 			}
    			return count;	
   	}		
