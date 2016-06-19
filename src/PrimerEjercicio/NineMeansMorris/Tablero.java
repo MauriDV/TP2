@@ -95,7 +95,6 @@ public class Tablero{
      /*
 		toString() : Representacion de la estructura del juego con las posiciones ocupadas por
 		jugador 1= 1 o jugador 2=2 o 0 correspondiente a vacio.
-
      */
      public String toString2(){
      	String s="\n\t"+tab[0][0]+"-------------------"+tab[0][3]+"---------------------"+tab[0][6]+"\n\t";
@@ -112,7 +111,6 @@ public class Tablero{
      	s+="\n\t|    		    | 	     		  |\n\t";
      	s+="\n\t"+tab[6][0]+"-------------------"+tab[6][3]+"---------------------"+tab[6][6]+"\n\t";
      	
-
      	return s;
      }
 

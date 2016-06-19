@@ -179,16 +179,19 @@ public class Vecinos {
 	public boolean esMolino(int nodo,int jugador){ 
 		
 		List<Integer> visited = new LinkedList<Integer>();
-		int search=10; //Para que primero haga analisis dfs por 10's u horizontales.
-		//nodo=3,search=10,jug=1
+		
+		//Analisis para nodos horizontales
+		int search=10; 
 		int i= dfs(nodo,search,visited,jugador);
 		visited.clear();
         if (i==3) return true;
+		
 		//Analisis nodos verticales
-		//search=20;
-		//i=dfs(nodo,search,visited,1);
-		//visited.clear();
-		//if (i==3) return true;
+		search=20;
+		i=dfs(nodo,search,visited,jugador);
+		visited.clear();
+		if (i==3) return true;
+		//Si no encontro, entonces no hay molino.
 		return false;
 
 	}
@@ -199,14 +202,10 @@ public class Vecinos {
 4      marcamos origen como visitado
 5      mientras S no este vacío:
 6          sacamos un elemento de la pila S llamado v
-7          
-			
-		   para cada vertice w adyacente a v en el Grafo: 
+7          para cada vertice w adyacente a v en el Grafo: 
 8              si w no ah sido visitado:
 9                 marcamos como visitado w
 10                 insertamos w dentro de la pila S
-
-
 	*/
 	public int dfs(int nodo, int search,List<Integer> visited,int jug){
 		   	Stack<Integer> pila = new Stack<Integer>();
@@ -221,7 +220,6 @@ public class Vecinos {
     				System.out.println("current "+current );//ok
     				System.out.println("Jugador en array "+fichaJug[current.intValue()]);//ok
     				if (fichaJug[current.intValue()]==jug){ //si la posicion coincide con el jugador (1 o 2)
-    					
     					//la primera vez deberia coincidir
     					count++;
     					System.out.println("Contando "+count);
@@ -252,44 +250,6 @@ public class Vecinos {
   	}		
 
 
-	/*Recorrido dfs para la busqueda de molinos sobre la lista de adyancencias*/
-	//CAMBIARLO POR EL Q NO ES RECURSIVO
-	/*private int dfs(int nodo,int count,List visited,int search){
-		if (!visited.contains(nodo)){
-			visited.add(0,nodo);
-			if (count==3){ 
-				return 3;
-			}else{
-				List<Integer> adj = new LinkedList<Integer>();
-				//obtengo los adyancentes
-				for (int c=0; c < col ; c++) {
-					System.out.println("");
-					System.out.println("NODO "+nodo+ " COL"+ col+ " Current c "+c);
-					System.out.print("");
-					//obtener los que son solo horizontales o verticales
-					//dependiendo de con quien lo llama a dfs.
-					System.out.println(" VALOR "+adyacencia[nodo][col]);
-					if (adyacencia[nodo][col]==search){
-						adj.add(col); 
-					}
-				}
-				//para cada adyancente correr DFS
-				//mientras count!=3, mientras no sea molino. 
-				while(!adj.isEmpty() && count!=3){
-					if (!visited.contains(adj.get(0)) && fichaJug[ adj.get(0).intValue() ]!=0 ){ 
-						// solo seguir la busqueda si hay una ficha jugada en esa posicion(!=0).	
-						count+=dfs(adj.get(0).intValue(),count,visited,search);
-						
-					}
-					adj.remove(0);
-				}
-				return count;
-			}
-		}
-		return count;
-	}
-
-*/
 	//toString de la clase.
 	 public String toString() {
         String s ="";// "\n\t  ---------------------------- \n\t";
