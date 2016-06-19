@@ -92,5 +92,28 @@ public class Tablero{
         s = s + "   0   1   2   3   4   5   6\n";
         return s;
      }
+     /*
+		toString() : Representacion de la estructura del juego con las posiciones ocupadas por
+		jugador 1= 1 o jugador 2=2 o 0 correspondiente a vacio.
+
+     */
+     public String toString2(){
+     	String s="\n\t"+tab[0][0]+"-------------------"+tab[0][3]+"---------------------"+tab[0][6]+"\n\t";
+     	s+="\n\t|    		    | 	     		  |\n\t";
+     	s+="\n\t|        "+tab[1][1]+"----------"+tab[1][3]+"------------"+tab[1][5]+"        | \n\t";
+     	s+="\n\t|     	 |	    |		 |	  |\n\t";
+     	s+="\n\t|        |     "+tab[2][2]+"----"+tab[2][3]+"----"+tab[2][4]+"	 |	  |	\n\t";
+     	s+="\n\t|        |     |         |       |        |  \n\t";
+     	s+="\n\t"+tab[3][0]+"--------"+tab[3][1]+"-----"+tab[3][2]+"         "+tab[3][4]+"-------"+tab[3][5]+"--------"+tab[3][6]+" \n\t";
+     	s+="\n\t|        |     |         |       |        |  \n\t";
+     	s+="\n\t|        |     "+tab[4][2]+"----"+tab[4][3]+"----"+tab[4][4]+"       |        |\n\t";
+     	s+="\n\t|     	 |	    |		 |	  |\n\t";
+     	s+="\n\t|        "+tab[5][1]+"----------"+tab[5][3]+"------------"+tab[5][5]+"        | \n\t";
+     	s+="\n\t|    		    | 	     		  |\n\t";
+     	s+="\n\t"+tab[6][0]+"-------------------"+tab[6][3]+"---------------------"+tab[6][6]+"\n\t";
+     	
+
+     	return s;
+     }
 
 } 
