@@ -256,6 +256,28 @@ public class Vecinos {
   		}
   		return count;
   	}
+  	//Muestra una lista de pares de movimientos que puede realizar el jugador
+  	//ejemplo (nodo 0, puede mover a nodo 9) (0,9)
+  	//(0,1) el 0 puede mover al 1
+  	/*public List<Pair<Integer,Integer>> showMoves(int jugador){
+  		List<Integer> apareceEn = new LinkedList<Integer>();//En cada posicion de esta
+  		//se lista guarda en que fila aparece el jugador pasado por parametro
+  		for (int i=0;i < fichaJug.length ;i++ ) {
+  			if (fichaJug[i]==jugador) 
+  				apareceEn.add(i);//guardo la fila en donde aparece el jugador
+  			
+  		}
+
+
+  		List<Pair<Integer,Integer>> allMoves= new LinkedList<LinkedList<Integer>> ();
+  		
+
+  		return allMoves;
+  	}
+*/
+
+
+
 
 	//toString de la clase.
 	//muestra la lista de adyancencias

@@ -29,21 +29,22 @@ public class EstadoMolino implements AdversarySearchState {
 	//A partir de el se genera un nuevo estado.
 	//le paso como dato quien juega, donde juega, y de que estado viene
     //Constructor para cuando se inserta una ficha
-	public EstadoMolino(int jug,int f,int c, EstadoMolino father){
-		vecino.setFicha(jug,f);//jugada del jugador en posicion donde juega
+    //posiciones para jugar de 0 a 23."nodos"
+	public EstadoMolino(int jug,int pos, EstadoMolino father){
+		vecino.setFicha(jug,pos);//jugada del jugador en posicion donde juega
         tablero.refreshTab(vecino);//Actualiza el tablero con la jugada
         currentPlayer=jug; //Seteo quien hizo la jugada.		
 		parent=father;//Y de que estado provino.
-        esMolinoBool= vecino.esMolino(f,jug);//Calcula si se genero molino con esa jugada
+        esMolinoBool= vecino.esMolino(pos,jug);//Calcula si se genero molino con esa jugada
 	}
     
     //Constructor para cuando se genera molino por poner una ficha
-    //Entonces provee de la generacion de mas estados a partir de ello
-    //permitiendo eliminar al jugador corriente una ficha del contrario.
-	public EstadoMolino(int f,EstadoMolino father){
-        vecino.borraFicha(f);//Desocupa ese "nodo" f.
+    //Entonces provee de la generacion de mas estados a partir de ello,
+    //permitiendo eliminar, al jugador corriente, una ficha del contrario.
+	public EstadoMolino(int pos,EstadoMolino father){
+        vecino.borraFicha(pos);//Desocupa ese "nodo" pos.
         tablero.refreshTab(vecino);//Actualiza el tablero con la jugada
-        parent=father;
+        parent=father;//Identifica de que estado viene
     }
 
     //Retorna si el estado es Max, es decir, si esta jugando 
