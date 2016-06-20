@@ -18,11 +18,15 @@ public class Vecinos {
 	//del juego, donde hay un 10 entonces esa columna es adyacente a el (a la fila) pero horizontalmente.
 	//Donde hay 20 adyancente vertical.
 	//AMPLIAR MAS EN MANUAL !!!---------------------------------------
+
 	private int fila; //24 x 24
 	private int col;
 	private int[] fichaJug; //1 o 2 dependiendo que jugador juega jug1=1, jug2=2
 	//Constructor de la clase parametrizado, seteo desde afuera la cantidad de
 	//filas y de columnas
+	private List<Integer> molinos; //Historial de los nodos en los que se generaron molinos
+	private List<Integer> molinoCurrent;//Los molinos corrientes
+
 	public Vecinos(int f, int c){
 		fila=f;//se setea con 23 desde afuera
 		col=c;//se setea con 23 desde afuera.
@@ -40,12 +44,15 @@ public class Vecinos {
 		for (int i=0;i <fila ;i++ ) {
 			fichaJug[i]=0;
 		}
+		molinos= new LinkedList<Integer>();
+		molinoCurrent=new LinkedList<Integer>();
 	}	
 	//Carga la matriz de adyacencias correspondiente a las relaciones
 	//que existen de "vecindad"
 	public void cargaVecino(){
 		//10 para costo de adyancentes horizontales
 		//20 para costo de adyacentes verticales
+		//ej: el 0 tiene adyacent horizontal al 1, y adj vertical al 9.
 		adyacencia[0][1]=10; 
 		adyacencia[0][9]=20;
 		
@@ -140,6 +147,11 @@ public class Vecinos {
 	public void setFicha(int ficha, int pos){
 		fichaJug[pos]=ficha;
 	}
+	//Dada una posicion borra del arreglo de jugadas, ese "nodo".
+	//y lo deja disponible
+	public void borraFicha(int pos){
+		fichaJug[pos]=0;
+	}
 	//Retorna el arreglo que contiene que jugador jugo en cada posicion
 	//ej: 0 1 2 3 4 5 6 7 ... posiciones del arreglo
 	//    1 2 1 1 1 2 1 2 ... jugador
@@ -152,45 +164,37 @@ public class Vecinos {
 		return adyacencia; 
 	}
 
-	//Dado un nodo jugado, correr DFS para ese nodo y buscar Molino
-	//en base a sus adyancentes horizontales y sus adyacentes verticales
-	/*public boolean esMolino(int nodo){
-		List visited = new LinkedList<Integer>();
-		//Primera busqueda por horizontales.
-		int j=1;//Comienza con 1 ya que esa ficha recien coloca.
-		int search=10; //Para que primero haga analisis dfs por 10's u horizontales.
-		System.out.println("nodo "+nodo+" j "+j+ " search "+search);
-		System.out.println("VER Q PASA "+adyacencia[nodo][j]);
-		int i= dfs(nodo,j,visited,search);
-
-		visited.clear();
-		if (i==3) return true; //Hay molino por horizontales.
-		//Busqueda por Verticales
-		
-		j=1;//reinicializacion
-		search=20;//Para que haga dfs en busca de 20's o verticales.
-		i=dfs(nodo,j,visited,search);
-		visited.clear();
-		if (i==3) return true; //hay molino por verticales.
-		
-		return false; //sino no hay molino
-	}
-*/
-	public boolean esMolino(int nodo,int jugador){ 
-		
+	//Dado un "nodo" y el jugador que puso la ultima ficha, se busca si
+	//ese nodo creo un molino. 3 alineados verticales o 3 horizontales.
+	public boolean esMolino(int nodo,int jugador){ 		
 		List<Integer> visited = new LinkedList<Integer>();
-		
 		//Analisis para nodos horizontales
 		int search=10; 
 		int i= dfs(nodo,search,visited,jugador);
 		visited.clear();
-        if (i==3) return true;
-		
+        if (i==3){
+        	//guardo los nodos que generaron el molino en este recorrido.
+        	molinos.addAll( molinoCurrent);//guardo en backup 
+        	//de la clase el historial de nodos que hicieron molinos	
+        	molinoCurrent.clear();//libero el "calculador" de molinos corrientes.
+        	return true;
+        }
+        else{//si no es 3 la cantidad, entonces, no genero molino este recorrido
+        	molinoCurrent.clear();
+        }	
+
 		//Analisis nodos verticales
 		search=20;
 		i=dfs(nodo,search,visited,jugador);
 		visited.clear();
-		if (i==3) return true;
+		if (i==3){ 
+			molinos.addAll(molinoCurrent);
+			molinoCurrent.clear();	
+			return true;
+		}
+		else{
+			molinoCurrent.clear();
+		}
 		//Si no encontro, entonces no hay molino.
 		return false;
 
@@ -207,32 +211,23 @@ public class Vecinos {
 9                 marcamos como visitado w
 10                 insertamos w dentro de la pila S
 	*/
-	public int dfs(int nodo, int search,List<Integer> visited,int jug){
+	private int dfs(int nodo, int search,List<Integer> visited,int jug){
 		   	Stack<Integer> pila = new Stack<Integer>();
     		pila.push(nodo);//apilo nodo origen 
     		visited.add(nodo);//marco visitado
-    		int count=0;//ok
+    		int count=0;//inicializo contador.
     		while (!pila.isEmpty() ) {
     			if (count!=3){
-    				System.out.println("-------pila antes "+pila.toString());
     				Integer current = pila.pop();//saco nodo de la pila ok
-    				System.out.println("------------ pila despues "+pila.toString());
-    				System.out.println("current "+current );//ok
-    				System.out.println("Jugador en array "+fichaJug[current.intValue()]);//ok
     				if (fichaJug[current.intValue()]==jug){ //si la posicion coincide con el jugador (1 o 2)
     					//la primera vez deberia coincidir
     					count++;
-    					System.out.println("Contando "+count);
+    					molinoCurrent.add(current);//Guardo los nodos que van haciendo molino
     					for (int c=0; c < col ;c++ ) { //obtener los adyacentes    							
     						if (adyacencia[current.intValue()][c]==search){ //busca por 10 horizontales o 20 verticales
-    							System.out.println("Fila "+current.intValue());//ok
-    							System.out.println("adyacente "+ adyacencia[current.intValue()][c]+" y search "+search);
     							if ( !visited.contains ( (Integer) c) ) { //analisis si no fue visitado "la columna"
-    								System.out.println("HIJOS "+c);//para ver q hay
     								visited.add(c); //agregarlo a visitados
     								pila.push(c);//agregarlo a la pila
-    								System.out.println("visitados toString "+visited.toString());
-
     							}
 	   						}		
     					}
@@ -241,16 +236,29 @@ public class Vecinos {
     			else{
     				//count ==3;
     				return count;
-    			}	
-    			System.out.println("");
-    			System.out.println("FIN ITERACION");
-    			System.out.println("");			
+    			}
 			}
    			return count;	
   	}		
-
+  	//Dado un jugador 1 o 2, retorna la cantidad de fichas que tiene 
+  	public int cantFichasjug(int jug){
+  		int count=0;
+  		for (int i=0; i <fichaJug.length ;i++ ) {
+  				if(fichaJug[i]==jug) count++;
+  		}
+  		return count;	
+  	} 
+  	//Cantidad de fichas que tiene el juego.
+  	public int cantFichas(){
+  		int count=0;
+  		for (int i =0;i < fichaJug.length ;i++ ) {
+  			if(fichaJug[i]==1 || fichaJug[i]==2) count++; 
+  		}
+  		return count;
+  	}
 
 	//toString de la clase.
+	//muestra la lista de adyancencias
 	 public String toString() {
         String s ="";// "\n\t  ---------------------------- \n\t";
         for (int f = 0; f < fila; f++) {
@@ -264,6 +272,13 @@ public class Vecinos {
         //s = s + "   1   2   3   4   5   6   7\n";
         return s;
      }
-
+     //Muestra los nodos en los que se han generado molino
+     public String showMolinos(){
+     	String s="";
+     	for (int i=0;i <molinos.size() ;i++ ) {
+     		s+=molinos.get(i);
+     	}
+     	return s;
+     }
 
 }

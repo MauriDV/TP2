@@ -1,24 +1,26 @@
 /**
 * Clase : Tablero 
 * Representacion interna del tablero
-*
+*@author Delle Vedove Mauricio, Rondeau Matias
+*@version 1.0
 **/
+
 public class Tablero{
-	private int[][] tab;
-	private int fila;
-	private int col;
-	private int[][] ady;
-		
+	private int[][] tab; //representa el tablero del juego
+	private int fila;//la cantidad de filas del juego
+	private int col;//la cantidad de columnas del juego
+	private final int MAX_FICHAS= 24; //la cantidad de fichas q se puede poner en el tablero.	
+	//Setea desde afuera el tamaño q va a ser el tablero
 	public Tablero(int f, int c){
-		fila=f;
-		col=c;
+		fila=f;//setea el tamaño de la fila
+		col=c;//setea el tamaño de la columna
 		tab=new int[fila][col];
-		for (int i=0; i < fila ;i++ ) {
+		for (int i=0; i < fila ;i++ ) { //carga de posiciones vacias con 0
 			for (int j=0;j <col ; j++) {
 				tab[i][j]=0;
 			}
 		}
-		//Carga de posiciones Invalidas del tablero.
+		//Carga de posiciones Invalidas del tablero con -1.
 		tab[0][1]=-1;
 		tab[0][2]=-1;
 		tab[0][4]=-1;
@@ -50,16 +52,19 @@ public class Tablero{
 		tab[6][2]=-1;
 		tab[6][4]=-1;
 		tab[6][5]=-1;
-		
-		
-
 	}
-	
+	//retorna el tablero de la clase.
 	public int[][] getTab(){
 		return tab;
 	}
+	//setea posiciones del tablero, dado una fila, una col y un valor
 	public void setTab(int f,int c, int v){
 		tab[f][c]=v;
+	}
+	//retorna la constante q determina la cantidad de fichas
+	//q se pueden poner
+	public int sizeTablero(){
+		return MAX_FICHAS;
 	}
 
 	//Dada un arreglo conteniendo que fichas tienen
@@ -80,6 +85,8 @@ public class Tablero{
 		}
 
 	}
+
+
 	//toString de la clase.
 	 public String toString() {
         String s = "\n\t  ---------------------------------- \n\t";
