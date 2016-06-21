@@ -30,4 +30,7 @@ public class Pair<T,E>{
 		fst=first;
 		snd=second;
 	}
+	public String toString(){
+		return "("+fst+","+snd+")";
+	}
 }

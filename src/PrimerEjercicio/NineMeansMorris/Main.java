@@ -1,3 +1,7 @@
+import java.io.*;
+import java.util.*;
+
+
 public class Main{
 	public static void main(String[] args) {
 		Vecinos a= new Vecinos(24,24); //crea lista de adyacencias
@@ -20,6 +24,7 @@ public class Main{
 
 		tab.refreshTab(a);//actualiza las jugadas 
 		System.out.println(tab.toString2());
-
+		List<Pair<Integer,Integer>> posiblesMovimientos = a.posibleMov(2);
+		System.out.println("posiblesMovimientos "+posiblesMovimientos.toString());
 	}
 }

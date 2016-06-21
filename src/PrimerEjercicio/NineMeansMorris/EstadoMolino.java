@@ -21,8 +21,8 @@ public class EstadoMolino implements AdversarySearchState {
         tablero= new Tablero(7,7); //tablero 7x7 con sus operaciones
         vecino= new Vecinos(24,24);//matriz ady 24x24
         currentPlayer=1; //Comienza el jugador numero 1
-	    parent=null;
-        esMolinoBool=false;
+	    parent=null;//no tiene padre
+        esMolinoBool=false;//no existen molinos
     }
 	
     //Constructor de la clase con parametros
@@ -46,6 +46,7 @@ public class EstadoMolino implements AdversarySearchState {
         tablero.refreshTab(vecino);//Actualiza el tablero con la jugada
         parent=father;//Identifica de que estado viene
     }
+
 
     //Retorna si el estado es Max, es decir, si esta jugando 
 	//el jugador 1.

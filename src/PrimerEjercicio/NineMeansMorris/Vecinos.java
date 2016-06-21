@@ -18,15 +18,14 @@ public class Vecinos {
 	//del juego, donde hay un 10 entonces esa columna es adyacente a el (a la fila) pero horizontalmente.
 	//Donde hay 20 adyancente vertical.
 	//AMPLIAR MAS EN MANUAL !!!---------------------------------------
-
 	private int fila; //24 x 24
 	private int col;
-	private int[] fichaJug; //1 o 2 dependiendo que jugador juega jug1=1, jug2=2
-	//Constructor de la clase parametrizado, seteo desde afuera la cantidad de
-	//filas y de columnas
+	private int[] fichaJug; //Guarda en cada posicion 1 o 2 dependiendo que jugador juega jug1=1, jug2=2
 	private List<Integer> molinos; //Historial de los nodos en los que se generaron molinos
 	private List<Integer> molinoCurrent;//Los molinos corrientes
 
+	//Constructor de la clase parametrizado, seteo desde afuera la cantidad de
+	//filas y de columnas
 	public Vecinos(int f, int c){
 		fila=f;//se setea con 23 desde afuera
 		col=c;//se setea con 23 desde afuera.
@@ -239,7 +238,8 @@ public class Vecinos {
     			}
 			}
    			return count;	
-  	}		
+  	}
+
   	//Dado un jugador 1 o 2, retorna la cantidad de fichas que tiene 
   	public int cantFichasjug(int jug){
   		int count=0;
@@ -247,7 +247,16 @@ public class Vecinos {
   				if(fichaJug[i]==jug) count++;
   		}
   		return count;	
-  	} 
+  	}
+  	//dado un jugador, retorna una lista de "nodos" en donde puso sus fichas
+  	public List<Integer> dondeColoco(int jugador){
+  		List<Integer> pusoEn = new LinkedList<Integer>();
+  		for (int i=0;i < fichaJug.length ;i++ ) {
+  			if(fichaJug[i]==jugador) pusoEn.add(i);
+  		}
+  		return pusoEn;
+  	}
+
   	//Cantidad de fichas que tiene el juego.
   	public int cantFichas(){
   		int count=0;
@@ -256,39 +265,49 @@ public class Vecinos {
   		}
   		return count;
   	}
-  	//Muestra una lista de pares de movimientos que puede realizar el jugador
+
+  	//Crea una lista de pares de movimientos que puede realizar el jugador parametro= 1 o 2
   	//ejemplo (nodo 0, puede mover a nodo 9) (0,9)
   	//(0,1) el 0 puede mover al 1
-  	/*public List<Pair<Integer,Integer>> showMoves(int jugador){
+  	public List<Pair<Integer,Integer>> posibleMov(int jugador){
   		List<Integer> apareceEn = new LinkedList<Integer>();//En cada posicion de esta
-  		//se lista guarda en que fila aparece el jugador pasado por parametro
+  		//lista se guarda en que fila aparece el jugador pasado por parametro
   		for (int i=0;i < fichaJug.length ;i++ ) {
   			if (fichaJug[i]==jugador) 
   				apareceEn.add(i);//guardo la fila en donde aparece el jugador
-  			
+ 		}
+  		List<Pair<Integer,Integer>> allMoves= new LinkedList<Pair<Integer,Integer>> ();
+  		//Busca que adyacentes son 0, es decir, estan libres para moverse.
+  		//recorro todos las fichas que jugo el "jugador" parametro.
+  		for (int i=0;i < apareceEn.size() ; i++) {
+ 			//busco adyacentes para esa "fila" 
+  			for (int c=0;c < col ;c++ ) {
+  				if (adyacencia[apareceEn.get(i).intValue()][c]==10 || adyacencia[apareceEn.get(i).intValue()][c]==20){
+  					//ver q cada adyacente sea 0 en la posicion q ocupa
+  					//en el arreglo de "nodos" y formar el par.
+  					if (fichaJug[c]==0){
+  						Pair<Integer,Integer> par= new Pair<Integer,Integer>(apareceEn.get(i),c);
+  						//guardo el nodo q se puede mover
+  						//y hacia donde se puede mover.
+  						allMoves.add(par);//agrego a la lista de posibles movimientos
+  						
+  					}
+  				}
+  			}
   		}
-
-
-  		List<Pair<Integer,Integer>> allMoves= new LinkedList<LinkedList<Integer>> ();
-  		
-
   		return allMoves;
   	}
-*/
-
-
-
 
 	//toString de la clase.
 	//muestra la lista de adyancencias
 	 public String toString() {
-        String s ="";// "\n\t  ---------------------------- \n\t";
+        String s ="";
         for (int f = 0; f < fila; f++) {
             for (int c = 0; c < col; c++) {
                s = s + " | "+adyacencia[f][c];
             }
             s+=" | END FILA :"+f+"    " ;
-            //s = s + " | \n\t  ---------------------------- \n\t";
+           
         }
         s+="| END COL";
         //s = s + "   1   2   3   4   5   6   7\n";
