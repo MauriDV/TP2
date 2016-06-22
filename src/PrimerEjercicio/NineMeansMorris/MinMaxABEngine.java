@@ -42,6 +42,8 @@ public class MinMaxABEngine <P extends AdversarySearchProblem<State>, State exte
 	Ffuncion
   */	
 	public int minMaxAB(State s,int alfa, int beta,int depth){
+		if(s == null) throw new IllegalArgumentException("State null");
+		if(depth<0) throw new IllegalArgumentException("invalid depth");
 		if(problem.end(s)|| depth==0){ //depth==0 ??? (Profundidad 0)
 			return problem.value(s);
 		}
@@ -70,7 +72,8 @@ public class MinMaxABEngine <P extends AdversarySearchProblem<State>, State exte
 	y con la máxima maxDepth() profundidad.
 	*/
 	public int computeValue(State state){
-		return 0;
+		if(state == null) throw new IllegalArgumentException("State null");
+		return minMaxAB(state, maxDepth,problem.minValue(),problem.maxValue());
 	}	
 
 	/*
@@ -109,5 +112,6 @@ public class MinMaxABEngine <P extends AdversarySearchProblem<State>, State exte
 	public void report(){
 
 	}
+	
 
 }

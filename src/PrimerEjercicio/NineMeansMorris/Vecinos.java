@@ -241,7 +241,7 @@ public class Vecinos {
   	}
 
   	//Dado un jugador 1 o 2, retorna la cantidad de fichas que tiene 
-  	public int cantFichasjug(int jug){
+  	public int cantFichasJug(int jug){
   		int count=0;
   		for (int i=0; i <fichaJug.length ;i++ ) {
   				if(fichaJug[i]==jug) count++;
@@ -264,6 +264,14 @@ public class Vecinos {
   			if(fichaJug[i]==1 || fichaJug[i]==2) count++; 
   		}
   		return count;
+  	}
+  	//Retorna una lista con los nodos libres donde se pueden colocar fichas.
+  	public List<Integer> lugaresLibres(){
+  		List<Integer> libres = new LinkedList<Integer>();
+  		for (int i=0; i < fichaJug.length ;i++ ) {
+  			if (fichaJug[i]==0) libres.add(i);
+  		}
+  		return libres;
   	}
 
   	//Crea una lista de pares de movimientos que puede realizar el jugador parametro= 1 o 2
