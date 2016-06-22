@@ -37,22 +37,50 @@ public class ProblemaMolino implements AdversarySearchProblem<EstadoMolino>{
         public List<EstadoMolino> getSuccessors(EstadoMolino s) {
             List<EstadoMolino> successors = new LinkedList<EstadoMolino>();
             //si la cantidad de fichas es menor a 19: colocar fichas en tablero.
+            if (s.getNumFichas()<19){//COLOCACION DE FICHAS
+                
+                if (s.isMax()){//jugador 1.
+                    succColocarFichas(1,successors,s);
+                }
+                else{ //jugador 2
+                    succColocarFichas(2,successors,s);    
+                }
+            }    
+            else{
+                //Si la cantidad es 19, obtener sucesores con respecto a realizar movidas de fichas.    
+                
 
-            //jugador 1.
-            //brindarle todas las posiciones en las q puede colocar una ficha.
-            //obtener todos esos sucesores
-
-            //analogo si es jugador 2
-
-
-            //Si la cantidad es 19, obtener sucesores con respecto a realizar movidas de fichas.
-
+            }
             return successors;
-        
-
-
-
         }
+        
+        //Metodo para obtener los sucesores de un estado por colocacion de fichas
+        private void succColocarFichas(int jugador,List<EstadoMolino> listSucc,EstadoMolino s){
+            List<Integer> posiciones=s.lugaresDisp(); //guardo todos los lugares disponibles.
+            //generar un estado sucesor a partir de poner una ficha de Max en cada posicion
+            //teniendo en cuenta que en cada insercion, puede generar molino y permita
+            //borrarle una ficha de su contrario.
+            for (int i=0; i < posiciones.size() ; i++) {
+                EstadoMolino suc = new EstadoMolino(jugador, posiciones.get(i).intValue(),s);
+                if (suc.esMolino()){ //entonces generar otra tipo de estado.
+                    //permito borrar una ficha de su contrario
+                    //le asigno false a molino porque ya deja de ser molino.
+                    EstadoMolino aux = new EstadoMolino(jugador,posiciones.get(i).intValue(),false,s);
+                    listSucc.add(aux);//agrego a la lista de sucesores    
+                 }
+                 else{//si no es molino, agrego a la lista simplemente.
+                    listSucc.add(suc);
+                 }
+            }
+            posiciones.clear(); //Por las dudas
+        }
+        //Metodo para obtener los sucesores de un estado por movimiento de fichas.
+        private void succMoverFichas(int jugador,List<EstadoMolino> listSucc,EstadoMolino s){
+
+        } 
+
+
+
 
         //Indica si es estado final.
 		public boolean end(EstadoMolino state){
