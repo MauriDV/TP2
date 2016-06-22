@@ -53,6 +53,11 @@ public class EstadoMolino implements AdversarySearchState {
         parent=father;//Identifica de que estado viene
         esMolinoBool=molino;
     }
+    
+    //Constructor para generar estado a partir de movimientos
+    public EstadoMolino(){
+
+    }
 
     //Retorna si el estado es Max, es decir, si esta jugando 
 	//el jugador 1.

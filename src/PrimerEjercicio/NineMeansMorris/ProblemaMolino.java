@@ -76,7 +76,12 @@ public class ProblemaMolino implements AdversarySearchProblem<EstadoMolino>{
         }
         //Metodo para obtener los sucesores de un estado por movimiento de fichas.
         private void succMoverFichas(int jugador,List<EstadoMolino> listSucc,EstadoMolino s){
-
+            //guardo la lista de (nodo,movimiento a que nodo);
+            List<Pair<Integer,Integer>> movimientos = s.getPosiblesMov();
+            Pair<Integer,Integer> current = new Pair<Integer,Integer>();
+            for (int i=0; i < movimientos.size();i++ ) {
+                    
+                }    
         } 
 
 
