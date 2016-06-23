@@ -43,21 +43,43 @@ public class EstadoMolino implements AdversarySearchState {
     //Constructor para cuando se genera molino por poner una ficha
     //Entonces provee de la generacion de mas estados a partir de ello,
     //permitiendo eliminar, al jugador corriente, una ficha del contrario.
-	public EstadoMolino(int jug,int pos,boolean molino,EstadoMolino father){
-        vecino.setFicha(jug,pos);//juega la ficha
+	public EstadoMolino(int jug,int posNueva,int posABorrar,boolean molino,EstadoMolino father){
+        vecino.setFicha(jug,posNueva);//juega la ficha
+        vecino.borraFicha(posABorrar);//Desocupa ese "nodo" pos de su contrario
         tablero.refreshTab(vecino);//actualiza el tablero
         if (jug==1) currentPlayer=2;
         if (jug==2) currentPlayer=1;
-        vecino.borraFicha(pos);//Desocupa ese "nodo" pos de su contrario
-        tablero.refreshTab(vecino);//Actualiza el tablero con la jugada
         parent=father;//Identifica de que estado viene
         esMolinoBool=molino;
     }
     
-    //Constructor para generar estado a partir de movimientos
-    public EstadoMolino(){
-
+    //Constructor para generar estados a partir de movimientos
+    // parametros importantes: ficha a mover y hacia que nodo destino moverla
+    //ver si la ficha que mueve genera molino
+    public EstadoMolino(int jug,int posOld,int posNew,EstadoMolino father){
+        vecino.borraFicha(posOld);//borro la ficha seleccionada
+        vecino.setFicha(jug,posNew);//la muevo a algun adyacente desocupado
+        tablero.refreshTab(vecino);//actualizo el tablero
+        if (jug==1) currentPlayer=2;//actualizo current jugador
+        if (jug==2) currentPlayer=1;
+        parent=father;//actualizo padre
+        esMolinoBool=vecino.esMolino(posNew,jug);//si genero molino el movimiento
     }
+
+    //Constructor de estados a partir de realizar un movimiento, eliminar ese movimiento
+    //insertar en el destino y ademas permitir borrar una ficha del contrario.
+    public EstadoMolino(int jug,int posOld,int posNew,int posDel,boolean molino,EstadoMolino father){
+        vecino.borraFicha(posDel);//borro la ficha seleccionada del contrario
+        vecino.borraFicha(posOld);//borro la ficha vieja
+        vecino.setFicha(jug,posNew);//la muevo a algun adyacente desocupado
+        tablero.refreshTab(vecino);//actualizo el tablero
+        if (jug==1) currentPlayer=2;//actualizo current jugador
+        if (jug==2) currentPlayer=1;
+        parent=father;//actualizo padre
+        esMolinoBool=molino;
+    }
+
+
 
     //Retorna si el estado es Max, es decir, si esta jugando 
 	//el jugador 1.
@@ -108,6 +130,17 @@ public class EstadoMolino implements AdversarySearchState {
     public int getNumFichaJug(int jugador){
         return vecino.cantFichasJug(jugador);
     }
+    //Retorna la lista de los nodos en donde coloco el jugador 1
+    public List<Integer> dondeColoco1(){
+        return vecino.dondeColoco(1);
+    }
+    //Analogo a dondeColoco1
+    public List<Integer> dondeColoco2(){
+        return vecino.dondeColoco(2);
+    }   
+
+
+
 
     //Retorna la regla Aplicada para llegar this.Estado 
     //O quien es el padre de este estado. 

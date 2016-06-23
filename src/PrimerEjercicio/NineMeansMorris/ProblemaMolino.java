@@ -37,25 +37,36 @@ public class ProblemaMolino implements AdversarySearchProblem<EstadoMolino>{
         public List<EstadoMolino> getSuccessors(EstadoMolino s) {
             List<EstadoMolino> successors = new LinkedList<EstadoMolino>();
             //si la cantidad de fichas es menor a 19: colocar fichas en tablero.
-            if (s.getNumFichas()<19){//COLOCACION DE FICHAS
-                
+            if (s.getNumFichas()<19){//COLOCACION DE FICHAS       
                 if (s.isMax()){//jugador 1.
-                    succColocarFichas(1,successors,s);
+                    List<Integer> fichasColocadas2 = s.dondeColoco2();//donde coloco el 2    
+                    succColocarFichas(1,successors,fichasColocadas2,s);
+                    fichasColocadas2.clear();    
                 }
                 else{ //jugador 2
-                    succColocarFichas(2,successors,s);    
+                    List<Integer> fichasColocadas1 = s.dondeColoco1();//donde coloco el 1
+                    succColocarFichas(2,successors,fichasColocadas1,s);    
+                    fichasColocadas1.clear();
                 }
             }    
             else{
                 //Si la cantidad es 19, obtener sucesores con respecto a realizar movidas de fichas.    
-                
-
+                if (s.isMax()){//jugador1
+                    List<Integer> fichasColocadas2 = s.dondeColoco2();    
+                    succMoverFichas(1,successors,fichasColocadas2,s);
+                    fichasColocadas2.clear();
+                }
+                else{//jugador 2
+                    List<Integer> fichasColocadas1 = s.dondeColoco1();
+                    succMoverFichas(2,successors,fichasColocadas1,s);
+                    fichasColocadas1.clear();
+                }
             }
             return successors;
         }
         
         //Metodo para obtener los sucesores de un estado por colocacion de fichas
-        private void succColocarFichas(int jugador,List<EstadoMolino> listSucc,EstadoMolino s){
+        private void succColocarFichas(int jugador,List<EstadoMolino> listSucc,List<Integer> dondeColoco, EstadoMolino s){
             List<Integer> posiciones=s.lugaresDisp(); //guardo todos los lugares disponibles.
             //generar un estado sucesor a partir de poner una ficha de Max en cada posicion
             //teniendo en cuenta que en cada insercion, puede generar molino y permita
@@ -65,8 +76,12 @@ public class ProblemaMolino implements AdversarySearchProblem<EstadoMolino>{
                 if (suc.esMolino()){ //entonces generar otra tipo de estado.
                     //permito borrar una ficha de su contrario
                     //le asigno false a molino porque ya deja de ser molino.
-                    EstadoMolino aux = new EstadoMolino(jugador,posiciones.get(i).intValue(),false,s);
-                    listSucc.add(aux);//agrego a la lista de sucesores    
+                    //ACA BORRAR UNA POR UNA LAS DEL CONTRARIO, VARIOS ESTADOS
+                    for (int k=0;k < dondeColoco.size() ; k++ ) {
+                        int posABorrar= dondeColoco.get(k).intValue();
+                        EstadoMolino aux = new EstadoMolino(jugador,posiciones.get(i).intValue(),posABorrar,false,s);
+                        listSucc.add(aux);//agrego a la lista de sucesores    
+                    }                        
                  }
                  else{//si no es molino, agrego a la lista simplemente.
                     listSucc.add(suc);
@@ -75,13 +90,32 @@ public class ProblemaMolino implements AdversarySearchProblem<EstadoMolino>{
             posiciones.clear(); //Por las dudas
         }
         //Metodo para obtener los sucesores de un estado por movimiento de fichas.
-        private void succMoverFichas(int jugador,List<EstadoMolino> listSucc,EstadoMolino s){
+        private void succMoverFichas(int jugador,List<EstadoMolino> listSucc,List<Integer> dondeColoco,EstadoMolino s){
             //guardo la lista de (nodo,movimiento a que nodo);
             List<Pair<Integer,Integer>> movimientos = s.getPosiblesMov();
-            Pair<Integer,Integer> current = new Pair<Integer,Integer>();
             for (int i=0; i < movimientos.size();i++ ) {
-                    
+                //creo un par
+                Pair<Integer,Integer> current = new Pair<Integer,Integer>(movimientos.get(i).getFst(),movimientos.get(i).getSnd());            
+                //guardo primera y segunda componente del par
+                //(nodo, adyacente disponible)
+                int fst= current.getFst().intValue();
+                int snd= current.getSnd().intValue();
+                //creo un nuevo estado borrando el antiguo y moviendolo a su adyacente
+                EstadoMolino suc= new EstadoMolino(jugador,fst,snd,s);
+                if (suc.esMolino()){//si el estado generado es molino
+                    //ACA BORRRAR UNA POR UNA LAS DEL CONTRARIO,Generando varios estados
+                    for (int k=0;k <dondeColoco.size() ;k++ ) {
+                        int posABorrar= dondeColoco.get(k).intValue();    
+                        //generar un nuevo estado permitiendo borrar
+                        EstadoMolino aux= new EstadoMolino(jugador,fst,snd,posABorrar,false,s);    
+                        listSucc.add(aux);
+                    }
+                }
+                else{
+                    //simplemente agrego el estado
+                    listSucc.add(suc);
                 }    
+            }    
         } 
 
 
