@@ -131,14 +131,21 @@ public class EstadoMolino implements AdversarySearchState {
         return vecino.cantFichasJug(jugador);
     }
     //Retorna la lista de los nodos en donde coloco el jugador 1
-    public List<Integer> dondeColoco1(){
-        return vecino.dondeColoco(1);
+    public List<Integer> dondeColoco(int player){ 
+        return vecino.dondeColoco(player);
     }
-    //Analogo a dondeColoco1
-    public List<Integer> dondeColoco2(){
-        return vecino.dondeColoco(2);
-    }   
-
+    //retorna una lista de pares, que representa el nodo y cuantos ady tiene
+    //el nodo de ese jugador.
+    public List<Pair<Integer,Integer>> nodosJug(int player){
+        List<Integer> lugares= vecino.dondeColoco(player);//saco lista de los nodos donde jugo
+        List<Pair<Integer,Integer>> nodoCantAdy= new LinkedList<Pair<Integer,Integer>>(); 
+        for (int i=0; i < lugares.size() ;i++ ) {//recorro toda la lista
+            List<Integer> ady = vecino.nodosAdyLibres(lugares.get(i).intValue()); //saco la lista de ady libres de ese nodo
+            Pair<Integer,Integer> par = new Pair<Integer,Integer>(lugares.get(i),ady.size());//armo par (nodo,cantidad de adyacentes) 
+            nodoCantAdy.add(par);
+        }
+        return nodoCantAdy;
+    }  
 
 
 

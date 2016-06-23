@@ -305,6 +305,23 @@ public class Vecinos {
   		}
   		return allMoves;
   	}
+  	
+  	//Dado un nodo, retorna que adyacente disponible tiene.
+  	public List<Integer> nodosAdyLibres(int nodo){
+  		//nodo es la posicion del arreglo fichaJug.
+  		//saco los adyacentes de la lista de adyacencias y me fijo si es cero, agrego a la lista
+  		List<Integer> adyLibres = new LinkedList<Integer>();
+  		for (int c=0; c < col; c++ ) {
+  			if (adyacencia[nodo][c]==10 || adyacencia[nodo][c]==20){//miro las columnas q son ady
+  				if(fichaJug[c]==0){//me fijo si ese nodo esta libre
+  					//agrego a la lista
+  					adyLibres.add(c);
+  				}
+  			}	
+  		}
+  		return adyLibres;
+
+  	}
 
 	//toString de la clase.
 	//muestra la lista de adyancencias
