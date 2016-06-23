@@ -80,6 +80,7 @@ public class Tablero{
 			for (int c=0;c <col ;c++ ) {
 				if(tab[f][c] == 0 ){
 					tab[f][c]=jugadas[i];
+		
 					i++;
 				}
 			}
