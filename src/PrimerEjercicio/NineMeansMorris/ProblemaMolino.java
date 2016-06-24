@@ -40,16 +40,17 @@ public class ProblemaMolino implements AdversarySearchProblem<EstadoMolino>{
             System.out.println("NUMERO DE FICHAS "+s.getNumFichas());
             List<EstadoMolino> successors = new LinkedList<EstadoMolino>();
             //si la cantidad de fichas es menor a 19: colocar fichas en tablero.
+            EstadoMolino succ= new EstadoMolino();
             if (s.getNumFichas()<19){//COLOCACION DE FICHAS       
                 System.out.println("S ES MAX??? "+ s.isMax()) ;
                 if (s.isMax()){//jugador 1.
-                    System.out.println("-----JUGADOR 1 OBT SUCC");
+                    //System.out.println("-----JUGADOR 1 OBT SUCC");
                     List<Integer> fichasColocadas2 = s.dondeColoco(2);//donde coloco el 2    
-                    System.out.println("Fichas colocadas por 2");
-                    System.out.println(fichasColocadas2.toString());    
-                    succColocarFichas(1,successors,fichasColocadas2,s);
-                    System.out.println("SUCESORES A PARTIR DE 1");
-                    System.out.println(successors.toString());
+                    //System.out.println("Fichas colocadas por 2");
+                    //System.out.println(fichasColocadas2.toString());    
+                    successors.addAll(succColocarFichas(1,successors,fichasColocadas2,succ,s));
+                    //System.out.println("SUCESORES A PARTIR DE 1");
+                    //System.out.println(successors.toString());
                     fichasColocadas2.clear();    
                 }
                 else{ //jugador 2
@@ -57,13 +58,13 @@ public class ProblemaMolino implements AdversarySearchProblem<EstadoMolino>{
                     List<Integer> fichasColocadas1 = s.dondeColoco(1);//donde coloco el 1
                     System.out.println("Fichas colocadas por 1");
                     System.out.println(fichasColocadas1.toString());
-                    succColocarFichas(2,successors,fichasColocadas1,s);
+                    successors.addAll(succColocarFichas(2,successors,fichasColocadas1,succ,s));
                     System.out.println("SUCESORES A PARTIR DE 2");
                     System.out.println(successors.toString());    
                     fichasColocadas1.clear();
                 }
             }    
-            else{
+            /*else{
                 System.out.println("ENTRA POR cantidad >=19");
                 //Si la cantidad es 19, obtener sucesores con respecto a realizar movidas de fichas.    
                 if (s.isMax()){//jugador1
@@ -86,25 +87,33 @@ public class ProblemaMolino implements AdversarySearchProblem<EstadoMolino>{
                    // System.out.println(successors.toString());    
                     fichasColocadas1.clear();
                 }
-            }
+            }*/
             //System.out.println("SUCESORES FINAL");
            // System.out.println(successors.toString());
             return successors;
         }
         
         //Metodo para obtener los sucesores de un estado por colocacion de fichas
-        private void succColocarFichas(int jugador,List<EstadoMolino> listSucc,List<Integer> dondeColoco, EstadoMolino s){
+        private List<EstadoMolino> succColocarFichas(int jugador,List<EstadoMolino> listSucc,List<Integer> dondeColoco, EstadoMolino suc, EstadoMolino s){
             List<Integer> posiciones=s.lugaresDisp(); //guardo todos los lugares disponibles.
+            System.out.println("LUGARES disponibles "+posiciones.toString());
             //generar un estado sucesor a partir de poner una ficha de Max en cada posicion
             //teniendo en cuenta que en cada insercion, puede generar molino y permita
             //borrarle una ficha de su contrario.
+            //ACA HACER BACKUP DE VECINOS ANTES DE AGREGAR ALGO, PORQUE ES AGREGAR 1, LUEGO EN OTRO
+            //PERO SIN ESE 1 PRIMERO
+            EstadoMolino backup= s.clonarEstado(s);  
+            System.out.println("BACKUP FUNCIONA???? "+backup.getVecino().toString2());
+          
             for (int i=0; i < posiciones.size() ; i++) {
+                System.out.println("SUCESOR "+posiciones.get(i));
                 //NO PUEDO CREAR ESTADOS SIN INICIALIZAR TABLERO Y VECINOS
                 //---- ARREGLAR PARA Q SE ACTUALIZEN ESTOS DIAS PERO CON EL TABLERO Y VECINOS Q VIENE Y DEMAS!!!!!
                 //EstadoMolino suc = new EstadoMolino();
                 //HACER UN SETEOESTADO2 , Y LOS GET TABLERO Y GET VECINO DE ESTADO
-                EstadoMolino suc = new EstadoMolino();
                 suc.setEstadoMolino2(jugador,posiciones.get(i).intValue(),s.getVecino(),s.getTablero(),s.getCantFichas(),s);
+                System.out.println("VECINOS"+ s.getVecino().toString2()); 
+                System.out.println("ES MOLINO??? "+suc.esMolino());
                 if (suc.esMolino()){ //entonces generar otra tipo de estado.
                     //permito borrar una ficha de su contrario
                     //le asigno false a molino porque ya deja de ser molino.
@@ -117,10 +126,18 @@ public class ProblemaMolino implements AdversarySearchProblem<EstadoMolino>{
                     }                        
                  }
                  else{//si no es molino, agrego a la lista simplemente.
+                    System.out.println("NO FUE MOLINO ");
+                    //System.out.println("SUCESOR OBTENIDO COLOCAR FICHAS "+ suc.toString());
+                    //System.out.println("-------------------------------------------------------------");
                     listSucc.add(suc);
                  }
+                 System.out.println("BACKUP LUEGO"+backup.getVecino().toString2());
+                 s=backup.clonarEstado(backup);
+                 System.out.println("Q PASO CON ESTADO PADRE "+s.getVecino().toString2());
+                 System.out.println("-----------FIN ITERACION "+i+" ---------------");
             }
             posiciones.clear(); //Por las dudas
+            return listSucc;
         }
         //Metodo para obtener los sucesores de un estado por movimiento de fichas.
         private void succMoverFichas(int jugador,List<EstadoMolino> listSucc,List<Integer> dondeColoco,EstadoMolino s){

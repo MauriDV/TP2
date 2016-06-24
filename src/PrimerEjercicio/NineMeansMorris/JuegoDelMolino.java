@@ -31,7 +31,7 @@ public class JuegoDelMolino{
 					System.out.println("\n\t Elija una posicion de 00 a 23 NO OCUPADA y presione ENTER\n\t");
 					jugada=in.nextInt();
 				}
-				System.out.println("PASE");
+				System.out.println("\n\tPASE JUGADA HUMANO\n\t");
 				//jugar en el juego y setear un nuevo estado a partir de lo jugado.
 				vecino.setFicha(1,jugada.intValue());
 				board.refreshTab(vecino);

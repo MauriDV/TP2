@@ -338,6 +338,14 @@ public class Vecinos {
         //s = s + "   1   2   3   4   5   6   7\n";
         return s;
      }
+     public String toString2(){
+     	String s="[";
+     	for (int i=0; i < fichaJug.length ;i++ ) {
+     		s+=fichaJug[i]+",";
+     	}
+     	s+="]";
+     	return s;
+     }
      //Muestra los nodos en los que se han generado molino
      public String showMolinos(){
      	String s="";

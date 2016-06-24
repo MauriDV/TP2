@@ -42,6 +42,7 @@ public class EstadoMolino implements AdversarySearchState {
     public void setEstadoMolino2(int jug,int posNew,Vecinos vec,Tablero tab,int cantF,EstadoMolino father){
         this.vecino=vec; //hago el backup de los atributos de la clase.
         this.tablero=tab;
+        System.out.println("LUEGO DEL BACKUP COMO QUEDA VECINOS "+vecino.toString2());
         vecino.setFicha(jug,posNew);//juega la ficha
         tablero.refreshTab(vecino);
         if (jug==1) currentPlayer=2;//actualizo current jugador
@@ -97,16 +98,26 @@ public class EstadoMolino implements AdversarySearchState {
 
 //Usar estas para la construccion de estados a partir de seteos
     public Vecinos getVecino(){
-        return vecino;
+        return this.vecino;
     }
     public Tablero getTablero(){
-        return tablero;
+        return this.tablero;
     }
     public EstadoMolino getParent(){
-        return parent;
+        return this.parent;
     }
     public int getCantFichas(){
-        return cantFichas;
+        return this.cantFichas;
+    }
+    public EstadoMolino clonarEstado(EstadoMolino s){
+        EstadoMolino clone= new EstadoMolino();
+        clone.currentPlayer=s.getPlayer();; //Jug1 = 1, Jug2= 2
+        clone.parent=s.getParent(); //el padre del estado.
+        clone.tablero= s.getTablero(); //instancia de la clase Tablero
+        clone.vecino=s.getVecino(); //instancia de la clase Vecinos
+        clone.esMolinoBool=s.esMolinoBool;//Almacena el valor de verdad si el estado es o no molino.
+        clone.cantFichas=s.getCantFichas();
+        return clone;
     }
 
 
