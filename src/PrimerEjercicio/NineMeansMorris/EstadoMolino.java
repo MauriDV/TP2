@@ -15,6 +15,7 @@ public class EstadoMolino implements AdversarySearchState {
 	private Tablero tablero; //instancia de la clase Tablero
     public Vecinos vecino; //instancia de la clase Vecinos
 	public boolean esMolinoBool;//Almacena el valor de verdad si el estado es o no molino.
+    private int cantFichas;
     
     //Contructor de EstadoMolino para el Estado inicial
 	public EstadoMolino(){
@@ -23,62 +24,90 @@ public class EstadoMolino implements AdversarySearchState {
         currentPlayer=1; //Comienza el jugador numero 1
 	    parent=null;//no tiene padre
         esMolinoBool=false;//no existen molinos
+        cantFichas=0;
     }
 	
-    //Constructor de la clase con parametros
-	//A partir de el se genera un nuevo estado.
-	//le paso como dato quien juega, donde juega, y de que estado viene
-    //Constructor para cuando se inserta una ficha
-    //posiciones para jugar de 0 a 23."nodos"
-	public EstadoMolino(int jug,int pos, EstadoMolino father){
-		vecino.setFicha(jug,pos);//jugada del jugador en posicion donde juega
-        tablero.refreshTab(vecino);//Actualiza el tablero con la jugada
-        if (jug==1) currentPlayer=2;
+    //SETS DE ESTADOS PARA COLOCAR FICHAS : SI NO GENERA MOLINO!!!
+    public void setEstadoMolino(int jug,Vecinos vec, Tablero tab,boolean molino,int cantF,EstadoMolino father){
+        this.vecino= vec;
+        this.tablero=tab;
+        if (jug==1) currentPlayer=2;//actualizo current jugador
         if (jug==2) currentPlayer=1;
-         //Seteo quien hizo la jugada.		
-		parent=father;//Y de que estado provino.
-        esMolinoBool= vecino.esMolino(pos,jug);//Calcula si se genero molino con esa jugada
-	}
-    
-    //Constructor para cuando se genera molino por poner una ficha
-    //Entonces provee de la generacion de mas estados a partir de ello,
-    //permitiendo eliminar, al jugador corriente, una ficha del contrario.
-	public EstadoMolino(int jug,int posNueva,int posABorrar,boolean molino,EstadoMolino father){
-        vecino.setFicha(jug,posNueva);//juega la ficha
+        this.esMolinoBool=molino;
+        this.parent=father;
+        this.cantFichas=cantF;
+        cantFichas++;   
+    }
+    //POR SI GENERAN MOLINO
+    public void setEstadoMolino2(int jug,int posNew,Vecinos vec,Tablero tab,int cantF,EstadoMolino father){
+        this.vecino=vec; //hago el backup de los atributos de la clase.
+        this.tablero=tab;
+        vecino.setFicha(jug,posNew);//juega la ficha
+        tablero.refreshTab(vecino);
+        if (jug==1) currentPlayer=2;//actualizo current jugador
+        if (jug==2) currentPlayer=1;
+        this.cantFichas=cantF;//backup de la cantidad de fichas
+        cantFichas++;
+        this.esMolinoBool= vecino.esMolino(posNew,jug);//calcula si es molino
+    }
+    //PARA BORRAR FICHAS !!! ACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+    public void setEstadoMolino3(int jug,int posNew,int posABorrar,Vecinos vec, Tablero tab, int cantF,boolean molino,EstadoMolino father ){
+        this.vecino=vec; //backup
+        this.tablero=tab;
+        this.cantFichas=cantF;
+        vecino.setFicha(jug,posNew);//juega la ficha
         vecino.borraFicha(posABorrar);//Desocupa ese "nodo" pos de su contrario
         tablero.refreshTab(vecino);//actualiza el tablero
         if (jug==1) currentPlayer=2;
         if (jug==2) currentPlayer=1;
         parent=father;//Identifica de que estado viene
         esMolinoBool=molino;
+        cantFichas++;    
     }
-    
-    //Constructor para generar estados a partir de movimientos
-    // parametros importantes: ficha a mover y hacia que nodo destino moverla
-    //ver si la ficha que mueve genera molino
-    public EstadoMolino(int jug,int posOld,int posNew,EstadoMolino father){
-        vecino.borraFicha(posOld);//borro la ficha seleccionada
-        vecino.setFicha(jug,posNew);//la muevo a algun adyacente desocupado
+    //PARA MOVER FICHAS Y CALCULAR MOLINO!!!
+    public void setEstadoMolino4(int jug, int orig,int dest,Vecinos vec, Tablero tab, int cantF, EstadoMolino father){
+        this.vecino=vec; //backup
+        this.tablero=tab;
+        this.cantFichas=cantF;
+        vecino.borraFicha(orig);//borro la ficha seleccionada
+        vecino.setFicha(jug,dest);//la muevo a algun adyacente desocupado
         tablero.refreshTab(vecino);//actualizo el tablero
         if (jug==1) currentPlayer=2;//actualizo current jugador
         if (jug==2) currentPlayer=1;
         parent=father;//actualizo padre
-        esMolinoBool=vecino.esMolino(posNew,jug);//si genero molino el movimiento
+        esMolinoBool=vecino.esMolino(dest,jug);//si genero molino el movimiento
+        cantFichas++;
     }
-
-    //Constructor de estados a partir de realizar un movimiento, eliminar ese movimiento
-    //insertar en el destino y ademas permitir borrar una ficha del contrario.
-    public EstadoMolino(int jug,int posOld,int posNew,int posDel,boolean molino,EstadoMolino father){
-        vecino.borraFicha(posDel);//borro la ficha seleccionada del contrario
-        vecino.borraFicha(posOld);//borro la ficha vieja
-        vecino.setFicha(jug,posNew);//la muevo a algun adyacente desocupado
+    //POR MOVIMIENTO DE FICHAS Y YA GENERO MOLINO
+    public void setEstadoMolino5(int jug, int orig,int dest,int posABorrar,Vecinos vec, Tablero tab, int cantF, boolean molino, EstadoMolino father){
+        this.vecino=vec; //backup
+        this.tablero=tab;
+        this.cantFichas=cantF;
+        
+        vecino.borraFicha(posABorrar);//borro la ficha seleccionada del contrario
+        vecino.borraFicha(orig);//borro la ficha vieja
+        vecino.setFicha(jug,dest);//la muevo a algun adyacente desocupado
         tablero.refreshTab(vecino);//actualizo el tablero
         if (jug==1) currentPlayer=2;//actualizo current jugador
         if (jug==2) currentPlayer=1;
         parent=father;//actualizo padre
         esMolinoBool=molino;
+        cantFichas++;
     }
 
+//Usar estas para la construccion de estados a partir de seteos
+    public Vecinos getVecino(){
+        return vecino;
+    }
+    public Tablero getTablero(){
+        return tablero;
+    }
+    public EstadoMolino getParent(){
+        return parent;
+    }
+    public int getCantFichas(){
+        return cantFichas;
+    }
 
 
     //Retorna si el estado es Max, es decir, si esta jugando 
@@ -87,25 +116,23 @@ public class EstadoMolino implements AdversarySearchState {
 		return (currentPlayer==1);
 	}
 	
-    //retorna el tablero corriente
-	public int[][] getTablero(){
-		return tablero.getTab();
-	}
-	
     //retorna el jugador corriente
 	public int getPlayer(){
 		return currentPlayer;
 	}
-	
+	//retorna el tablero corriente
+    public int[][] getTab(){
+        return tablero.getTab();
+    }
     //Retorna si dos estados son iguales, 
 	//Para que sean iguales, deben tener los mismos tableros,
 	//mismas componentes y debe estar jugando el mismo jugador. 
 	public boolean equals(AdversarySearchState other){
 		EstadoMolino st = (EstadoMolino) other;
-		boolean eq = ( (Arrays.deepEquals( st.getTablero(),this.getTablero() ) ) && (st.getPlayer()==this.getPlayer() ) );		
+		boolean eq = ( (Arrays.deepEquals( st.getTab(),this.getTab() ) ) && (st.getPlayer()==this.getPlayer() ) );		
 		return eq;
 	}	
-    
+
      //Retorna el valor de verdad si el estado parametro es un molino
      //es molino si en la estructura del juego hay 3 mismas fichas alineadas
      //vertical u horizontalmente y ademas las fichas son "vecinas".
@@ -158,20 +185,24 @@ public class EstadoMolino implements AdversarySearchState {
     Un jugador gana si consigue que su oponente quede con menos de tres piezas,
     o no pueda realizar movimientos.
     */
-    public boolean estadoFin(){
+    public boolean estadoFin(){ //ESTADO FINAL ANALIZAR MEJOR
         //Gana jugador 2 :
         //jugador 1 tiene menos de 3 piezas
-        int piezas= vecino.cantFichasJug(1);
-        //Lista de movimientos posibles del 1 es vacia.
-        List<Pair<Integer,Integer>> mov= vecino.posibleMov(1);
-        if (piezas <3 || mov.isEmpty()) return true; //gana jugador 2.
-        //Gana jugador 1 :
-        piezas=vecino.cantFichasJug(2);
-        mov.clear();
-        mov=vecino.posibleMov(2);
-        if (piezas <3 || mov.isEmpty()) return true;
-        //o como seria el empate.
-        return false;   
+        boolean end=false;
+        if (cantFichas>18){ //Si se supera el estado de carga de fichas 
+            int piezas= vecino.cantFichasJug(1);
+             //Lista de movimientos posibles del 1 es vacia.
+            List<Pair<Integer,Integer>> mov= vecino.posibleMov(1);
+            if (piezas <3 || mov.isEmpty()) end=true; //gana jugador 2.
+            //Gana jugador 1 :
+            piezas=vecino.cantFichasJug(2);
+            mov.clear();
+            mov=vecino.posibleMov(2);
+            if (piezas <3 || mov.isEmpty()) end= true;
+            //o como seria el empate.
+        }
+        return end;   
+           
     }
     //Retorna el estado del tablero en forma de String.
     //con el jugador que esta jugando 

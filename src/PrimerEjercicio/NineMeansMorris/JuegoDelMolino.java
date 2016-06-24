@@ -1,4 +1,5 @@
 import java.util.Scanner;
+import java.util.*;
 
 public class JuegoDelMolino{
 	public static void main(String[] args) {
@@ -20,34 +21,55 @@ public class JuegoDelMolino{
 		System.out.println("\n\t------------ COMIENZO DEL JUEGO -------------------\n\t");
 		
 
-		while( problem.end(problem.initialState() ) ){
+		while( ! problem.end(problem.initialState() ) ){
 			if (problem.initialState().isMax()){//Si es el jugador 1=Humano
+			//POR INSERCION, FALTA POR MOVIMIENTO !!!
 				System.out.println("\n\tElija una posicion de 00 a 23 NO OCUPADA y presione ENTER \n\t");
 				Integer jugada = in.nextInt(); //Lectura de datos desde terminal de la jugada
-				//CONTROLAR ACA SI NO ES UN NODO EXISTENTE Pedir uno hasta q lo sea.
-				//jugar en el juego y setear un nuevo estado a partir de lo jugado.
+				//SI NO ES UN NODO EXISTENTE Pedir uno hasta q lo sea.				
 				while(!correctEntrada(jugada.intValue())){
 					System.out.println("\n\t Elija una posicion de 00 a 23 NO OCUPADA y presione ENTER\n\t");
 					jugada=in.nextInt();
 				}
-				System.out.println("SALI DE SELECCION");
+				System.out.println("PASE");
+				//jugar en el juego y setear un nuevo estado a partir de lo jugado.
 				vecino.setFicha(1,jugada.intValue());
 				board.refreshTab(vecino);
-				System.out.println( board.toString2());
+				System.out.println( board.toString2());//Muestra jugada hecha
 				if(vecino.esMolino(jugada.intValue(),1)){//Verificar si hizo molino el humano
 					System.out.println("\n\t HIZO MOLINO, PUEDE BORRAR UNA FICHA DE SU CONTRARIO\n\t");
 					System.out.println("\n\tELIJA LA FICHA QUE DESEA BORRAR :\n\t");	
 					Integer fichaElim = in.nextInt();
+					List<Integer> fichasContrarias = vecino.dondeColoco(2);
+					while(!fichasContrarias.contains(fichaElim)){
+						System.out.println("\n\tELIJA UNA FICHA VALIDA QUE DESEA BORRAR :\n\t");
+						fichaElim=in.nextInt();
+					}
 					//VERIFICAR ACA SI ES UNA FICHA VALIDA A BORRAR
 					vecino.borraFicha(fichaElim.intValue());
 					board.refreshTab(vecino);
+					System.out.println("CANTIDAD DE FICHAS JUGANDO 1 "+vecino.cantFichas());
+					//generar el estado por insercion y borrado de ficha
+					EstadoMolino humanState = new EstadoMolino(); //creo un nuevo estado
+					humanState.setEstadoMolino(1,vecino,board,false,problem.initialState().getCantFichas(),problem.initialState()); //seteo actualizaciones
+					problem= new ProblemaMolino(humanState); //reseteo el estado inicial.
 				}
-				//ACA GENERO EL ESTADO LUEGO DE JUGAR EL HUMANO
-				
-				
+				else{
+					//generar el estado solo por insercion sin molino
+					EstadoMolino humanState= new EstadoMolino();//NO PUEDO CREAR SIN TENER ESTE CONSTRUCTOR ANTES
+					humanState.setEstadoMolino(1,vecino,board,false,problem.initialState().getNumFichas(),problem.initialState());
+					problem= new ProblemaMolino (humanState);//seteo el estado nuevo	
+				}
 			}
 			else{//Si le toca jugar a jugador 2= Pc
-
+				System.out.println("\n\tJuega Computadora: Loading...\n\t");
+				System.out.println("PASE PPOR PC");
+				//System.out.println( problem.initialState().toString() );
+				System.out.println("CREA NUEVO PROBLEMA ABAJO");
+				problem= new ProblemaMolino(engine.computeSuccessor( problem.initialState() ));
+				//System.out.println("");
+			 	//System.out.println(problem.initialState().toString());
+			 	//System.out.println("FIN DE PC JUGADA");
 			}
 			
 		}

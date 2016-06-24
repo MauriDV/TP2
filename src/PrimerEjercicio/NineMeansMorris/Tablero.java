@@ -107,10 +107,8 @@ public class Tablero{
      */
      public String toString2(){
      	String s="\n\t                            ------------- NINE MENS MORRIS ----------- \n\t";
-     	s+="\n\t JUGADOR 1 = 1 \n\t";
-     	s+="\n\t JUGADOR 2 = 2\n\t ";
-     	s+="\n\t CASILLAS DISPONIBLES = 0 \n\t";
-     	s+="\n\t CASILLAS EXISTENTES = de 00 a 23 \n\t";
+     	s+="\n\t ||| JUGADOR 1 = 1 vs JUGADOR 2 = 2 (PC) ||| CASILLAS DISPONIBLES=0 ||| CASILLAS EXISTENTES= de 00 a 23 |||\n\t";
+     	s+="\n\t \n\t";
      	s+="\n\t((00)) "+tab[0][0]+ " ---------------------------------- ((01)) "+tab[0][3]+ " ------------------------------------ ((02)) "+tab[0][6]+"\n\t";
      	s+="\n\t|           		                          |       		                       |\n\t";
      	s+="\n\t|            ((03)) "+tab[1][1]+" ----------------------- ((04)) "+tab[1][3]+" -------------------------((05)) "+tab[1][5]+"       | \n\t";
