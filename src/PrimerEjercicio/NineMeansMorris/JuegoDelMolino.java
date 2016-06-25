@@ -156,6 +156,8 @@ public class JuegoDelMolino{
 					
 					//posicion valida
 					//si es ficha valida, corroborar donde quiere mover sea valido
+					//y q sea segunda componente de la ficha
+
 					boolean fichaValida=false;				
 					Integer pos2=0;
 					while(!fichaValida){
@@ -163,7 +165,9 @@ public class JuegoDelMolino{
 						pos2= in.nextInt();
 						for (int i=0; i < movim.size() ; i++) {
 							if(pos2.intValue() ==movim.get(i).getSnd().intValue() ){
-								fichaValida=true;
+								if(movim.get(i).getFst().intValue()==pos.intValue()){//que la fichavieja pos tenga como destino la nueva pos2
+									fichaValida=true;
+								}
 							}
 						}
 					}
@@ -214,7 +218,9 @@ public class JuegoDelMolino{
 						pos2= in.nextInt();
 						for (int i=0; i < movim.size() ; i++) {
 							if(pos2.intValue() ==movim.get(i).getSnd().intValue() ){
-								fichaValida=true;
+								if(movim.get(i).getFst().intValue()==pos.intValue()){//que la fichavieja pos tenga como destino la nueva pos2
+									fichaValida=true;
+								}
 							}
 						}
 					}
