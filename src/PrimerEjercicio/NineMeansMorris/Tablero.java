@@ -73,19 +73,32 @@ public class Tablero{
 	//tiene en cada posicion valida y quien esta en la posicion.
 	//1 representa a jug1
 	//2 representa a jug2.
-	public void refreshTab(Vecinos vec){
+	public void refreshTab(Vecinos vec){ 	
 		int[] jugadas= vec.getFichasJug();
-		int i=0;
-		for (int f=0;f < fila ;f++ ) {
-			for (int c=0;c <col ;c++ ) {
-				if(tab[f][c] == 0 ){
-					tab[f][c]=jugadas[i];
-		
-					i++;
-				}
-			}
-		}
-
+		tab[0][0] = jugadas[0]; 
+		tab[0][3]= jugadas[1];
+		tab[0][6]= jugadas[2];
+		tab[1][1]= jugadas[3];
+		tab[1][3]= jugadas[4];
+		tab[1][5]= jugadas[5];
+		tab[2][2]= jugadas[6];
+		tab[2][3]= jugadas[7];
+		tab[2][4]= jugadas[8];
+		tab[3][0]= jugadas[9];
+		tab[3][1]= jugadas[10];
+		tab[3][2]= jugadas[11];
+		tab[3][4]= jugadas[12];
+		tab[3][5]= jugadas[13];
+		tab[3][6]= jugadas[14];
+		tab[4][2]= jugadas[15];
+		tab[4][3]= jugadas[16];
+		tab[4][4]= jugadas[17];
+		tab[5][1]= jugadas[18];
+		tab[5][3]= jugadas[19];
+		tab[5][5]= jugadas[20];
+		tab[6][0]= jugadas[21];
+		tab[6][3]= jugadas[22];
+		tab[6][6]= jugadas[23];
 	}
 
 

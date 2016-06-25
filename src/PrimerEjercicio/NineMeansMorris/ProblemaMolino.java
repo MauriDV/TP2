@@ -102,7 +102,15 @@ public class ProblemaMolino implements AdversarySearchProblem<EstadoMolino>{
             //borrarle una ficha de su contrario.
             //ACA HACER BACKUP DE VECINOS ANTES DE AGREGAR ALGO, PORQUE ES AGREGAR 1, LUEGO EN OTRO
             //PERO SIN ESE 1 PRIMERO
-            EstadoMolino backup= s.clonarEstado(s);  
+            //BACKUP
+            Vecinos vecino= s.getVecino();
+            Tablero tab= s.getTablero();
+            int cantFichas= s.getCantFichas();
+            EstadoMolino parent= s.getParent();
+            int player= s.getPlayer();
+            boolean molino=false;
+            //Fin de backup
+            EstadoMolino backup= s.clonarEstado();  
             System.out.println("BACKUP FUNCIONA???? "+backup.getVecino().toString2());
           
             for (int i=0; i < posiciones.size() ; i++) {
@@ -131,10 +139,14 @@ public class ProblemaMolino implements AdversarySearchProblem<EstadoMolino>{
                     //System.out.println("-------------------------------------------------------------");
                     listSucc.add(suc);
                  }
-                 System.out.println("BACKUP LUEGO"+backup.getVecino().toString2());
-                 s=backup.clonarEstado(backup);
-                 System.out.println("Q PASO CON ESTADO PADRE "+s.getVecino().toString2());
-                 System.out.println("-----------FIN ITERACION "+i+" ---------------");
+                 s.setPlayer(player);
+                 s.setTablero(tab);
+                 s.setVecino(vecino);
+                 s.setCantFichas(cantFichas);
+                 s.setParent(parent);
+                 s.setMolino(molino);
+                 System.out.println("VECINO DE PADRE "+s.getVecino().toString2());
+                System.out.println("PADRE RESETEADO"+s.toString());
             }
             posiciones.clear(); //Por las dudas
             return listSucc;

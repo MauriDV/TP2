@@ -143,8 +143,8 @@ public class Vecinos {
 		
 	}
 	//Setea que jugador jugo en una posicion,0 si ninguno. 
-	public void setFicha(int ficha, int pos){
-		fichaJug[pos]=ficha;
+	public void setFicha(int jug, int pos){
+		fichaJug[pos]=jug;
 	}
 	//Dada una posicion borra del arreglo de jugadas, ese "nodo".
 	//y lo deja disponible
@@ -211,6 +211,7 @@ public class Vecinos {
 10                 insertamos w dentro de la pila S
 	*/
 	private int dfs(int nodo, int search,List<Integer> visited,int jug){
+		   	
 		   	Stack<Integer> pila = new Stack<Integer>();
     		pila.push(nodo);//apilo nodo origen 
     		visited.add(nodo);//marco visitado
@@ -321,6 +322,42 @@ public class Vecinos {
   		}
   		return adyLibres;
 
+  	}
+  	public boolean win(){
+  	        //Gana jugador 2 :
+        //jugador 1 tiene menos de 3 piezas
+        boolean end=false;
+        if (this.cantFichas()>18){ //Si se supera el estado de carga de fichas 
+            int piezas= this.cantFichasJug(1);
+             //Lista de movimientos posibles del 1 es vacia.
+            List<Pair<Integer,Integer>> mov= this.posibleMov(1);
+            if (piezas <3 || mov.isEmpty()) end=true; //gana jugador 2.
+            //Gana jugador 1 :
+            piezas=this.cantFichasJug(2);
+            mov.clear();
+            mov=this.posibleMov(2);
+            if (piezas <3 || mov.isEmpty()) end= true;
+            //o como seria el empate.
+        }
+        return end;     
+  	}
+  	public int whosWin(){
+  		int win=0;
+        if (this.cantFichas()>18){ //Si se supera el estado de carga de fichas 
+            int piezas= this.cantFichasJug(1);
+             //Lista de movimientos posibles del 1 es vacia.
+            List<Pair<Integer,Integer>> mov= this.posibleMov(1);
+            System.out.println();
+            if (piezas <3 || mov.isEmpty()) win=2; //gana jugador 2.
+            //Gana jugador 1 :
+            piezas=this.cantFichasJug(2);
+            mov.clear();
+            mov=this.posibleMov(2);
+            if (piezas <3 || mov.isEmpty()) win= 1;
+            //o como seria el empate.
+        }
+        return win;
+  		
   	}
 
 	//toString de la clase.

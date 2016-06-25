@@ -21,6 +21,7 @@ public class EstadoMolino implements AdversarySearchState {
 	public EstadoMolino(){
         tablero= new Tablero(7,7); //tablero 7x7 con sus operaciones
         vecino= new Vecinos(24,24);//matriz ady 24x24
+        vecino.cargaVecino();//Carga la lista de ADYACENCIAS---VEEEEEEEEEEEEEEEEER EN LOS OTROSSSS
         currentPlayer=1; //Comienza el jugador numero 1
 	    parent=null;//no tiene padre
         esMolinoBool=false;//no existen molinos
@@ -42,9 +43,10 @@ public class EstadoMolino implements AdversarySearchState {
     public void setEstadoMolino2(int jug,int posNew,Vecinos vec,Tablero tab,int cantF,EstadoMolino father){
         this.vecino=vec; //hago el backup de los atributos de la clase.
         this.tablero=tab;
-        System.out.println("LUEGO DEL BACKUP COMO QUEDA VECINOS "+vecino.toString2());
+       
         vecino.setFicha(jug,posNew);//juega la ficha
         tablero.refreshTab(vecino);
+         System.out.println("LUEGO DEL BACKUP COMO QUEDA VECINOS "+vecino.toString2());
         if (jug==1) currentPlayer=2;//actualizo current jugador
         if (jug==2) currentPlayer=1;
         this.cantFichas=cantF;//backup de la cantidad de fichas
@@ -96,6 +98,25 @@ public class EstadoMolino implements AdversarySearchState {
         cantFichas++;
     }
 
+    public void setPlayer(int jug){
+        this.currentPlayer=jug;
+    }
+    public void setTablero(Tablero tab){
+        this.tablero=tab;
+    }
+    public void setVecino(Vecinos vec){
+        this.vecino=vec;
+    }
+    public void setCantFichas(int cant){
+        this.cantFichas=cant;
+    }
+    public void setParent(EstadoMolino father){
+        this.parent=father;
+    }
+    public void setMolino(boolean b){
+        this.esMolinoBool=b;
+    }
+
 //Usar estas para la construccion de estados a partir de seteos
     public Vecinos getVecino(){
         return this.vecino;
@@ -109,14 +130,14 @@ public class EstadoMolino implements AdversarySearchState {
     public int getCantFichas(){
         return this.cantFichas;
     }
-    public EstadoMolino clonarEstado(EstadoMolino s){
+    public EstadoMolino clonarEstado(){
         EstadoMolino clone= new EstadoMolino();
-        clone.currentPlayer=s.getPlayer();; //Jug1 = 1, Jug2= 2
-        clone.parent=s.getParent(); //el padre del estado.
-        clone.tablero= s.getTablero(); //instancia de la clase Tablero
-        clone.vecino=s.getVecino(); //instancia de la clase Vecinos
-        clone.esMolinoBool=s.esMolinoBool;//Almacena el valor de verdad si el estado es o no molino.
-        clone.cantFichas=s.getCantFichas();
+        clone.currentPlayer=this.getPlayer();; //Jug1 = 1, Jug2= 2
+        clone.parent=this.getParent(); //el padre del estado.
+        clone.tablero= this.getTablero(); //instancia de la clase Tablero
+        clone.vecino=this.getVecino(); //instancia de la clase Vecinos
+        clone.esMolinoBool=this.esMolinoBool;//Almacena el valor de verdad si el estado es o no molino.
+        clone.cantFichas=this.getCantFichas();
         return clone;
     }
 

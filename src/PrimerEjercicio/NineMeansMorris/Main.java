@@ -11,10 +11,13 @@ public class Main{
 
 		Tablero tab= new Tablero(7,7); //crea un nuevo tablero 
 		
-		a.setFicha(1,3);//jugada del 1 en la posicion 3
-		a.setFicha(1,4);//juega el 1 en la posicion 4
-		a.setFicha(1,5);//
-		boolean molino=a.esMolino(0,1);
+		a.setFicha(1,0);//jugada del 1 en la posicion 3
+		a.setFicha(1,1);//juega el 1 en la posicion 4
+		a.setFicha(1,2);//
+		//a.setFicha(1,13);
+		//a.setFicha(1,20);
+
+		boolean molino=a.esMolino(2,1);
 		
 		System.out.println("");
 		System.out.println("VALOR MOLINO "+molino);
