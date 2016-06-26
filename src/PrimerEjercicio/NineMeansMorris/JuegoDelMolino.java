@@ -24,14 +24,14 @@ public class JuegoDelMolino{
 		System.out.println("\n\t------------ COMIENZO DEL JUEGO -------------------\n\t");
 		//! problem.end(problem.initialState()
 		int player=1;
-		List<Integer> listaNodo= new LinkedList<Integer>();
+		//List<Integer> listaNodo= new LinkedList<Integer>();
 		while( !vecino.win()  ){
 			//if (problem.initialState().isMax()){//Si es el jugador 1=Humano
 			//POR INSERCION, FALTA POR MOVIMIENTO !!!
 			if (vecino.cantFichas()<18){
 				if (player==1){ 
 					//----------------------------------------------------------------------------
-					System.out.println("\n\tJUEGA JUGADOR 1\n\t");
+					System.out.println("\n\t **** JUEGA JUGADOR 1 *****\n\t");
 					System.out.println("\n\tElija una posicion de 00 a 23 NO OCUPADA y presione ENTER \n\t");
 					Integer jugada = in.nextInt(); //Lectura de datos desde terminal de la jugada
 					//SI NO ES UN NODO EXISTENTE Pedir uno hasta q lo sea.				
@@ -44,12 +44,12 @@ public class JuegoDelMolino{
 					//jugar en el juego y setear un nuevo estado a partir de lo jugado.
 				
 					vecino.setFicha(1,jugada.intValue());
-					System.out.println("VECINO EN PLAYER 1"+ vecino.toString2());
+					//System.out.println("VECINO EN PLAYER 1"+ vecino.toString2());
 				
 					board.refreshTab(vecino);
 					System.out.println( board.toString2());//Muestra jugada hecha
 					//-------------------------------------------------------------------------------
-					System.out.println("Hizo molino?? "+vecino.esMolino(jugada.intValue(),1));
+					//System.out.println("Hizo molino?? "+vecino.esMolino(jugada.intValue(),1));
 					if(vecino.esMolino(jugada.intValue(),1)){//Verificar si hizo molino el humano
 						System.out.println("\n\t HIZO MOLINO, PUEDE BORRAR UNA FICHA DE SU CONTRARIO\n\t");
 						System.out.println("\n\tELIJA LA FICHA QUE DESEA BORRAR :\n\t");	
@@ -62,8 +62,8 @@ public class JuegoDelMolino{
 						//VERIFICAR ACA SI ES UNA FICHA VALIDA A BORRAR
 						vecino.borraFicha(fichaElim.intValue());
 						board.refreshTab(vecino);
-						System.out.println(board.toString2());
-						System.out.println("CANTIDAD DE FICHAS JUGANDO 1 "+vecino.cantFichas());
+						//System.out.println(board.toString2());
+						//System.out.println("CANTIDAD DE FICHAS JUGANDO 1 "+vecino.cantFichas());
 						//generar el estado por insercion y borrado de ficha
 						EstadoMolino humanState = new EstadoMolino(); //creo un nuevo estado
 						humanState.setEstadoMolino(1,vecino,board,false,problem.initialState().getCantFichas(),problem.initialState()); //seteo actualizaciones
@@ -77,10 +77,11 @@ public class JuegoDelMolino{
 						//problem= new ProblemaMolino (humanState);//seteo el estado nuevo	
 					
 					}
-					System.out.println("1 JUGO EN NODO (("+jugada.intValue()+"))");
-					listaNodo.add(jugada.intValue());
-					System.out.println("NODOS "+listaNodo.toString());
-					System.out.println("SHOW MOLINOS 1"+vecino.showMolinos());
+					System.out.println(board.toString2());
+					//System.out.println("1 JUGO EN NODO (("+jugada.intValue()+"))");
+					//listaNodo.add(jugada.intValue());
+					//System.out.println("NODOS "+listaNodo.toString());
+					//System.out.println("SHOW MOLINOS 1"+vecino.showMolinos());
 					player=2;
 				}
 				else{//Si le toca jugar a jugador 2= Pc
@@ -92,7 +93,7 @@ public class JuegoDelMolino{
 					//System.out.println("");
 			 		//System.out.println(problem.initialState().toString());
 			 		//System.out.println("FIN DE PC JUGADA");
-					System.out.println("\n\tJUEGA JUGADOR 2 \n\t");
+					System.out.println("\n\t***** JUEGA JUGADOR 2 *****\n\t");
 					//JUGAR UNA PERSONA A VER Q PASA
 					System.out.println("\n\tElija una posicion de 00 a 23 NO OCUPADA y presione ENTER \n\t");
 					Integer jugada = in.nextInt(); //Lectura de datos desde terminal de la jugada
@@ -104,7 +105,7 @@ public class JuegoDelMolino{
 					System.out.println("\n\tPASE JUGADA HUMANO\n\t");
 					//jugar en el juego y setear un nuevo estado a partir de lo jugado.
 					vecino.setFicha(2,jugada.intValue());
-					System.out.println("VECINO EN PLAYER 2"+ vecino.toString2());
+					//System.out.println("VECINO EN PLAYER 2"+ vecino.toString2());
 					board.refreshTab(vecino);
 					System.out.println( board.toString2());//Muestra jugada hecha
 					if(vecino.esMolino(jugada.intValue(),2)){//Verificar si hizo molino el humano
@@ -120,7 +121,7 @@ public class JuegoDelMolino{
 						vecino.borraFicha(fichaElim.intValue());
 						board.refreshTab(vecino);
 						System.out.println(board.toString2());
-						System.out.println("CANTIDAD DE FICHAS JUGANDO 2 "+vecino.cantFichas());
+						//System.out.println("CANTIDAD DE FICHAS JUGANDO 2 "+vecino.cantFichas());
 						//generar el estado por insercion y borrado de ficha
 						//EstadoMolino humanState = new EstadoMolino(); //creo un nuevo estado
 						//humanState.setEstadoMolino(1,vecino,board,false,problem.initialState().getCantFichas(),problem.initialState()); //seteo actualizaciones
@@ -132,7 +133,8 @@ public class JuegoDelMolino{
 						//humanState.setEstadoMolino(1,vecino,board,false,problem.initialState().getNumFichas(),problem.initialState());
 						//problem= new ProblemaMolino (humanState);//seteo el estado nuevo	
 					}
-					System.out.println("SHOW MOLINOS 1"+vecino.showMolinos());	
+					//System.out.println("SHOW MOLINOS 1"+vecino.showMolinos());	
+					System.out.println(board.toString2());
 					player=1;
 				}
 			}
@@ -142,16 +144,20 @@ public class JuegoDelMolino{
 					System.out.println(board.toString2());
 					System.out.println("\n\tMovimientos disponibles para player \n\t"+player);
 					List<Pair<Integer,Integer>> movim=vecino.posibleMov(player);//(ficha,destinos)
-					List<Integer> colocoF=vecino.dondeColoco(player);
 					System.out.println(movim.toString());
 					
-					System.out.println("\n\tELIJA UNA FICHA VALIDA PARA MOVER\n\t");
-					Integer pos= in.nextInt();
+					List<Integer> colocoF=vecino.dondeColoco(player);				
 					
+					Integer pos=100;
 					//corroboracion de ficha valida y posicion valida.
-					while  (!colocoF.contains(pos) ){
-						System.out.println("NO ES UNA FICHA SUYA, INGRESE UNA QUE LE PERTENEZCA");
-						pos= in.nextInt();
+					boolean ok= false;
+					while  (!ok){
+						if (colocoF.contains(pos)) {
+							ok=true;
+						}else{ 
+							System.out.println("\n\tELIJA UNA FICHA VALIDA PARA MOVER\n\t");
+							pos= in.nextInt();
+						}
 					}
 					
 					//posicion valida
@@ -175,7 +181,9 @@ public class JuegoDelMolino{
 					vecino.borraFicha(pos.intValue());
 					//y agrego a nueva posicion
 					vecino.setFicha(player,pos2.intValue());
-					System.out.println("MOVIO "+pos+" HACIA "+pos2);
+					board.refreshTab(vecino);
+					System.out.println(board.toString2());
+					System.out.println("\n\t MOVIO (("+pos+")) HACIA (("+pos2+"))\n\t");
 					//verifico si hizo molino en esa posicion, permite borrar una
 					if(vecino.esMolino(pos2.intValue(),player)){//Verificar si hizo molino el humano
 						System.out.println("\n\t HIZO MOLINO, PUEDE BORRAR UNA FICHA DE SU CONTRARIO\n\t");
@@ -189,24 +197,28 @@ public class JuegoDelMolino{
 						}						
 						vecino.borraFicha(fichaElim.intValue());
 						board.refreshTab(vecino);
-						System.out.println(board.toString2());
 					}
+					System.out.println(board.toString2());
 					player=2;	
 				}
 				else{//MOVIMIENTOS DEL PLAYER 2
 					System.out.println(board.toString2());
 					System.out.println("\n\tMovimientos disponibles para player \n\t"+player);
 					List<Pair<Integer,Integer>> movim=vecino.posibleMov(player);//(ficha,destinos)
-					List<Integer> colocoF=vecino.dondeColoco(player);
 					System.out.println(movim.toString());
 					
-					System.out.println("\n\tELIJA UNA FICHA VALIDA PARA MOVER\n\t");
-					Integer pos= in.nextInt();
+					List<Integer> colocoF=vecino.dondeColoco(player);				
 					
+					Integer pos=100;
 					//corroboracion de ficha valida y posicion valida.
-					while  (!colocoF.contains(pos) ){
-						System.out.println("NO ES UNA FICHA SUYA, INGRESE UNA QUE LE PERTENEZCA");
-						pos= in.nextInt();
+					boolean ok= false;
+					while  (!ok){
+						if (colocoF.contains(pos)) {
+							ok=true;
+						}else{ 
+							System.out.println("\n\tELIJA UNA FICHA VALIDA PARA MOVER\n\t");
+							pos= in.nextInt();
+						}
 					}
 					
 					//posicion valida
@@ -228,7 +240,9 @@ public class JuegoDelMolino{
 					vecino.borraFicha(pos.intValue());
 					//y agrego a nueva posicion
 					vecino.setFicha(player,pos2.intValue());
-					System.out.println("MOVIO "+pos+" HACIA "+pos2);
+					board.refreshTab(vecino);
+					System.out.println(board.toString2());
+					System.out.println("\n\t MOVIO (("+pos+")) HACIA (("+pos2+"))\n\t");
 					//verifico si hizo molino en esa posicion, permite borrar una
 					if(vecino.esMolino(pos2.intValue(),player)){//Verificar si hizo molino el humano
 						System.out.println("\n\t HIZO MOLINO, PUEDE BORRAR UNA FICHA DE SU CONTRARIO\n\t");
@@ -242,8 +256,8 @@ public class JuegoDelMolino{
 						}						
 						vecino.borraFicha(fichaElim.intValue());
 						board.refreshTab(vecino);
-						System.out.println(board.toString2());
 					}
+					System.out.println(board.toString2());
 					player=1;
 				}
 			}
@@ -257,30 +271,7 @@ public class JuegoDelMolino{
 
 	//Verificacion de datos de entrada
 	public static boolean correctEntrada(int valor){
-		if (valor==0) return true;
-		if (valor==1) return true;
-		if (valor==2) return true;
-		if (valor==3) return true;
-		if (valor==4) return true;
-		if (valor==5) return true;
-		if (valor==6) return true;
-		if (valor==7) return true;
-		if (valor==8) return true;
-		if (valor==9) return true;
-		if (valor==10) return true;
-		if (valor==11) return true;
-		if (valor==12) return true;
-		if (valor==13) return true;
-		if (valor==14) return true;
-		if (valor==15) return true;
-		if (valor==16) return true;
-		if (valor==17) return true;
-		if (valor==18) return true;
-		if (valor==19) return true;
-		if (valor==20) return true;
-		if (valor==21) return true;
-		if (valor==22) return true;
-		if (valor==23) return true;
+		if (0<=valor && valor<=23) return true;
 		return false;
 	}
 

@@ -23,7 +23,7 @@ public class Vecinos {
 	private int[] fichaJug; //Guarda en cada posicion 1 o 2 dependiendo que jugador juega jug1=1, jug2=2
 	private List<Integer> molinos; //Historial de los nodos en los que se generaron molinos
 	private List<Integer> molinoCurrent;//Los molinos corrientes
-
+	private int fichas;
 	//Constructor de la clase parametrizado, seteo desde afuera la cantidad de
 	//filas y de columnas
 	public Vecinos(int f, int c){
@@ -45,6 +45,7 @@ public class Vecinos {
 		}
 		molinos= new LinkedList<Integer>();
 		molinoCurrent=new LinkedList<Integer>();
+		fichas=0;
 	}	
 	//Carga la matriz de adyacencias correspondiente a las relaciones
 	//que existen de "vecindad"
@@ -144,6 +145,7 @@ public class Vecinos {
 	}
 	//Setea que jugador jugo en una posicion,0 si ninguno. 
 	public void setFicha(int jug, int pos){
+		fichas++;
 		fichaJug[pos]=jug;
 	}
 	//Dada una posicion borra del arreglo de jugadas, ese "nodo".
@@ -258,8 +260,12 @@ public class Vecinos {
   		return pusoEn;
   	}
 
-  	//Cantidad de fichas que tiene el juego.
+  	//Historial de cantidad de fichas que tiene el juego.
   	public int cantFichas(){
+  		return fichas;
+  	}
+  	//La cantidad de fichas del arreglo.
+  	public int cantFichas1(){
   		int count=0;
   		for (int i =0;i < fichaJug.length ;i++ ) {
   			if(fichaJug[i]==1 || fichaJug[i]==2) count++; 
