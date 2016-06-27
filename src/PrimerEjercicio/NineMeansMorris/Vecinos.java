@@ -9,7 +9,7 @@ import java.util.*;
 
 
 public class Vecinos {
-	private int[][] adyacencia;//la matriz de adyancencia cada fila contiene 10's o 20's
+	public int[][] adyacencia;//la matriz de adyancencia cada fila contiene 10's o 20's
 	//ambos valores representan costos de llegar de un nodo a otro horizontalmente 10.
 	//llega de un nodo a otro verticalmente 20.
 	//ej: fila 0: 0 0 0 0 0 10 0 10 0 20 0 20 20 ...hasta 23 col
@@ -18,12 +18,12 @@ public class Vecinos {
 	//del juego, donde hay un 10 entonces esa columna es adyacente a el (a la fila) pero horizontalmente.
 	//Donde hay 20 adyancente vertical.
 	//AMPLIAR MAS EN MANUAL !!!---------------------------------------
-	private int fila; //24 x 24
-	private int col;
-	private int[] fichaJug; //Guarda en cada posicion 1 o 2 dependiendo que jugador juega jug1=1, jug2=2
+	public int fila; //24 x 24
+	public int col;
+	public int[] fichaJug; //Guarda en cada posicion 1 o 2 dependiendo que jugador juega jug1=1, jug2=2
 	private List<Integer> molinos; //Historial de los nodos en los que se generaron molinos
 	private List<Integer> molinoCurrent;//Los molinos corrientes
-	private int fichas;
+	public int fichas;
 	//Constructor de la clase parametrizado, seteo desde afuera la cantidad de
 	//filas y de columnas
 	public Vecinos(int f, int c){

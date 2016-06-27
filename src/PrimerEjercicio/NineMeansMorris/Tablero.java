@@ -6,9 +6,9 @@
 **/
 
 public class Tablero{
-	private int[][] tab; //representa el tablero del juego
-	private int fila;//la cantidad de filas del juego
-	private int col;//la cantidad de columnas del juego
+	public int[][] tab; //representa el tablero del juego
+	public int fila;//la cantidad de filas del juego
+	public int col;//la cantidad de columnas del juego
 	private final int MAX_FICHAS= 24; //la cantidad de fichas q se puede poner en el tablero.	
 	//Setea desde afuera el tamaño q va a ser el tablero
 	public Tablero(int f, int c){

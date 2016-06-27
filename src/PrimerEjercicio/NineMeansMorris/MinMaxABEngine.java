@@ -86,13 +86,13 @@ public class MinMaxABEngine <P extends AdversarySearchProblem<State>, State exte
 	//GUARDAR EL ESTADO CON SU VALOR (VALOR,ESTADO). GUARDAR TODOS EN UNA LISTA.
 	//LUEGO SACAR EL MEJOR(RECORRIENDO LA LISTA) Y RETORNAR ESE ESTADO.
 	public State computeSuccessor(State state){
-		System.out.println("");
-		System.out.println(" *************************** Entre a computeSuccessor ****************************");
+		//System.out.println("");
+		//System.out.println(" *************************** Entre a computeSuccessor ****************************");
 		List<State> successors = problem.getSuccessors(state); //sucesores de state
-		System.out.println("**********************************************************************************");
-		System.out.println("");
-		System.out.println("====== Pase la obtencion de sucesores !!! =========");
-		System.out.println("Los sucesores obtenidos son = "+successors.toString());
+		//System.out.println("**********************************************************************************");
+		//System.out.println("");
+		//System.out.println("====== Pase la obtencion de sucesores !!! =========");
+		//System.out.println("Los sucesores obtenidos son = "+successors.toString());
 		List<Pair<Integer,State>> succValue = new LinkedList<Pair<Integer,State>>(); 
 		Pair<Integer,State> current= new Pair<Integer,State>();// (Int,State)
 		int i=0;

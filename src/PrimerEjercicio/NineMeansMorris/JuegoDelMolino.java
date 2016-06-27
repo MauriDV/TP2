@@ -20,11 +20,13 @@ public class JuegoDelMolino{
 		String option = in.nextLine();
 
 		System.out.println("\n\t------------ COMIENZO DEL JUEGO -------------------\n\t");
-		
-		while( ! problem.end(problem.initialState()  ) ){
+		boolean salir=false;
+		while( ! (problem.end( problem.initialState()) && (!salir) ) ){
 			
 			if (problem.initialState().getCantFichas()<18){//Juego por Insercion de fichas
-				if (problem.initialState().isMax() ){//Si es el jugador 1=Humano  
+				System.out.println("CANTIDAD DE FICHAS "+problem.initialState().getCantFichas());
+				if ( problem.initialState().isMax() ){//Si es el jugador 1=Humano  
+					System.out.println("Es Max? == "+problem.initialState().isMax());
 					//----------------------------------------------------------------------------
 					System.out.println("\n\t **************** JUEGA JUGADOR 1 ****************\n\t");
 					System.out.println("\n\tElija una posicion de 00 a 23 NO OCUPADA y presione ENTER \n\t");
@@ -38,8 +40,10 @@ public class JuegoDelMolino{
 					//jugar en el juego y setear un nuevo estado a partir de lo jugado.
 					
 					vecino.setFicha(1,jugada.intValue());
+					
 					board.refreshTab(vecino);
 					System.out.println( board.toString2());//Muestra jugada hecha
+					System.out.println("Cantidad de fichas en jugador uno, pero VEcino "+vecino.cantFichas());
 					//-------------------------------------------------------------------------------
 					
 					if(vecino.esMolino(jugada.intValue(),1)){//Verificar si hizo molino el humano
@@ -54,33 +58,27 @@ public class JuegoDelMolino{
 						}
 						vecino.borraFicha(fichaElim.intValue());
 						board.refreshTab(vecino);
+						System.out.println("Luego de borrar ficha, cantFichas segun vecino en player 1 "+vecino.cantFichas());
 						//generar el estado por insercion y borrado de ficha
-						EstadoMolino humanState = new EstadoMolino(); //creo un nuevo estado
-						humanState.setEstadoMolino(1,vecino,board,false,problem.initialState().getCantFichas(),problem.initialState()); //seteo actualizaciones
+						EstadoMolino humanState = new EstadoMolino(1,vecino,board,false,problem.initialState()); //creo un nuevo estado
 						problem= new ProblemaMolino(humanState); //reseteo el estado inicial.
 					}
 					//-------------------------------------------------------------------------------
 					else{
 						//generar el estado solo por insercion sin molino
-						EstadoMolino humanState= new EstadoMolino();
-						humanState.setEstadoMolino(1,vecino,board,false,problem.initialState().getNumFichas(),problem.initialState());
-						System.out.println("******************************************************************************");
-						System.out.println("***** ---> Estado Generado por el Humano : "+humanState.toString());
-						System.out.println("******************************************************************************");
-						problem= new ProblemaMolino (humanState);//seteo el estado nuevo	
-						
+						EstadoMolino humanState= new EstadoMolino(1,vecino,board,false,problem.initialState());
+						problem= new ProblemaMolino (humanState);//seteo el problema nuevo	
+						System.out.println("Fin DE CRECION DE HUMAN STATE Y FICHAS= "+humanState.getCantFichas());
+
 					}
+					System.out.println("CANTIDAD DE FICHAS luego de jugar HUmano "+problem.initialState().getCantFichas());
 				}
 				else{//Si le toca jugar a jugador 2= Pc
-					vecino= problem.initialState().getVecino();
-					board= problem.initialState().getTablero();
-
-					System.out.println("******************************* Antes que juegue la pc ******************************");
-					System.out.println("Vecino = "+vecino.toString2());
-					System.out.println("Board = "+board.toString());
-
+					//backup para solo ver q tienen
+					
+					//--------------------------------------------------------------------------------------
+					
 					System.out.println("\n\t **** JUEGA PC : Loading ... *****\n\t");
-					System.out.println("CREA NUEVO PROBLEMA ABAJO");
 					
 					EstadoMolino pcState= new EstadoMolino();
 					pcState= engine.computeSuccessor(problem.initialState().clonarEstado());
@@ -88,17 +86,17 @@ public class JuegoDelMolino{
 					
 					vecino=problem.initialState().getVecino();
 					board= problem.initialState().getTablero();
-					System.out.println("");
-			 		
-			 		System.out.println("++++++++++++++++ Finalizo PC : ");
-			 		System.out.println("FIN DE PC JUGADA");
-			 		System.out.println("Vecino = "+vecino.toString2());
-					System.out.println("Board = "+board.toString());
+					System.out.println("CANTIDAD DE FICHAS luego de jugar PC "+problem.initialState().getCantFichas());	
+				
 				}			
 			}
 			else{
 				System.out.println("******************************* MOVIMIENTOS DE FICHAS ************************ ");
+				System.out.println("CHAU !!!");
+				salir=true;
+				break;
 			}
+
 			/*else{//COMIENZA JUEGO POR MOVIMIENTOS !!!
 				System.out.println("\n\t************COMIENZAN LOS MOVIMIENTOS*****************\n\t");
 				if (player==1){//MOVIMIENTOS DEL PLAYER 1
