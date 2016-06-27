@@ -330,14 +330,16 @@ public class Vecinos {
 
   	}
   	public boolean win(){
-  	        //Gana jugador 2 :
+  	        
         //jugador 1 tiene menos de 3 piezas
         boolean end=false;
         if (this.cantFichas()>18){ //Si se supera el estado de carga de fichas 
+            
             int piezas= this.cantFichasJug(1);
              //Lista de movimientos posibles del 1 es vacia.
             List<Pair<Integer,Integer>> mov= this.posibleMov(1);
-            if (piezas <3 || mov.isEmpty()) end=true; //gana jugador 2.
+        	//Gana jugador 2 :
+        	if (piezas <3 || mov.isEmpty()) end=true; //gana jugador 2.
             //Gana jugador 1 :
             piezas=this.cantFichasJug(2);
             mov.clear();

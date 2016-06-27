@@ -86,8 +86,13 @@ public class MinMaxABEngine <P extends AdversarySearchProblem<State>, State exte
 	//GUARDAR EL ESTADO CON SU VALOR (VALOR,ESTADO). GUARDAR TODOS EN UNA LISTA.
 	//LUEGO SACAR EL MEJOR(RECORRIENDO LA LISTA) Y RETORNAR ESE ESTADO.
 	public State computeSuccessor(State state){
+		System.out.println("");
+		System.out.println(" *************************** Entre a computeSuccessor ****************************");
 		List<State> successors = problem.getSuccessors(state); //sucesores de state
-		System.out.println("SUCESORES DE COMPUTE"+successors.toString());
+		System.out.println("**********************************************************************************");
+		System.out.println("");
+		System.out.println("====== Pase la obtencion de sucesores !!! =========");
+		System.out.println("Los sucesores obtenidos son = "+successors.toString());
 		List<Pair<Integer,State>> succValue = new LinkedList<Pair<Integer,State>>(); 
 		Pair<Integer,State> current= new Pair<Integer,State>();// (Int,State)
 		int i=0;
@@ -98,16 +103,18 @@ public class MinMaxABEngine <P extends AdversarySearchProblem<State>, State exte
 			succValue.add(current);//agrego a la lista de pares
 			successors.remove(0);//elimino el succesor para avanzar
 		}
-		System.out.println("COMPUTE SUCESOREESS LISTA"+succValue.toString());
 		//Guardar el indice donde se encuentra Max 
 		int max=0;
 		i=0;
 		while (i < succValue.size()){
-			if ( (succValue.get(max)).getFst() < (succValue.get(i)).getFst() ){
+			if ( (succValue.get(max)).getFst().intValue() < (succValue.get(i)).getFst().intValue() ){
 				max=i; //intercambio si encontro otro max.
 			}
 			i++;
 		}
+		System.out.println("");
+		System.out.println("El Mejor estado para la PC "+(succValue.get(max)).getSnd().toString());
+		System.out.println(" ");
 		return (succValue.get(max)).getSnd(); //Retorno el estado mas prometedor.
 	}
 

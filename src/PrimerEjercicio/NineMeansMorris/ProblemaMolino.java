@@ -28,39 +28,94 @@ public class ProblemaMolino implements AdversarySearchProblem<EstadoMolino>{
        
         /*Dado un EstadoMolino, obtener los estados sucesores.
         Los estados sucesores se obtienen de dos formas:
-            -Si la cantidad de fichas es menor a 19 : Entonces se obtienen 
+            -Si la cantidad de fichas es menor a 18 : Entonces se obtienen 
                 sucesores de colocar fichas en el tablero.
-            -Si la cantidad de fichas es 19, entonces se obtienen sucesores
+            -Si la cantidad de fichas es 18, entonces se obtienen sucesores
                 con respecto a realizar movimientos en el tablero.    
 
         */
         public List<EstadoMolino> getSuccessors(EstadoMolino s) {
-            //System.out.println("---------- ESTADO PADRE -------- ");
-           // System.out.println(s.toString());
-            System.out.println("NUMERO DE FICHAS "+s.getNumFichas());
             List<EstadoMolino> successors = new LinkedList<EstadoMolino>();
-            //si la cantidad de fichas es menor a 19: colocar fichas en tablero.
-            EstadoMolino succ= new EstadoMolino();
-            if (s.getNumFichas()<19){//COLOCACION DE FICHAS       
-                System.out.println("S ES MAX??? "+ s.isMax()) ;
+            //si la cantidad de fichas es menor a 18: colocar fichas en tablero.
+            
+            if (s.getCantFichas()<18){//COLOCACION DE FICHAS       
+              
+                //EstadoMolino s1=s.clonarEstado(); 
+                //EstadoMolino backup=s.clonarEstado();             
+                
                 if (s.isMax()){//jugador 1.
-                    //System.out.println("-----JUGADOR 1 OBT SUCC");
-                    List<Integer> fichasColocadas2 = s.dondeColoco(2);//donde coloco el 2    
-                    //System.out.println("Fichas colocadas por 2");
-                    //System.out.println(fichasColocadas2.toString());    
-                    successors.addAll(succColocarFichas(1,successors,fichasColocadas2,succ,s));
-                    //System.out.println("SUCESORES A PARTIR DE 1");
-                    //System.out.println(successors.toString());
+                    EstadoMolino s1=s.clonarEstado(); 
+                     
+                    List<Integer> fichasColocadas2 = s1.dondeColoco(2);//donde coloco el 2    
+                    List<Integer> posiciones=s1.lugaresDisp();//donde se puede colocar fichas       
+                    for (int i=0; i < posiciones.size() ; i++) {
+                        EstadoMolino succ= new EstadoMolino();//genero un nuevo estado y seteo valores
+                        succ.setEstadoMolino2(1,posiciones.get(i).intValue(),s1.getVecino(),s1.getTablero(),s1.getCantFichas(),s1);
+                        if (succ.esMolino()){ //entonces generar otra tipo de estado.
+                        //permito borrar una ficha de su contrario
+                        //le asigno false a molino porque ya deja de ser molino.
+                           for (int k=0;k < fichasColocadas2.size() ; k++ ) {
+                                int posABorrar= fichasColocadas2.get(k).intValue();
+                                EstadoMolino aux= new EstadoMolino();//creo y hago backup con actualizaciones
+                                aux.setEstadoMolino3(1,posiciones.get(i).intValue(),posABorrar,s1.getVecino(),s1.getTablero(),s1.getCantFichas(),false,s1 );
+                                successors.add(aux);//agrego a la lista de sucesores    
+                            }                        
+                        }
+                        else{//si no es molino, agrego a la lista simplemente.
+                            System.out.println("No fue Molino : Solo agrego a la lista");
+                            
+                            successors.add(succ);
+
+                        }
+                    }
+                    posiciones.clear(); //Por las dudas
                     fichasColocadas2.clear();    
                 }
-                else{ //jugador 2
-                    System.out.println("------JUGADOR 2 OBT SUCC");
-                    List<Integer> fichasColocadas1 = s.dondeColoco(1);//donde coloco el 1
-                    System.out.println("Fichas colocadas por 1");
-                    System.out.println(fichasColocadas1.toString());
-                    successors.addAll(succColocarFichas(2,successors,fichasColocadas1,succ,s));
-                    System.out.println("SUCESORES A PARTIR DE 2");
-                    System.out.println(successors.toString());    
+                else{ //jugador 2 : PC
+                    System.out.println("s is Max? "+s.isMax());
+                    EstadoMolino s1=s.clonarEstado(); 
+
+                    List<Integer> fichasColocadas1 = s1.dondeColoco(1);//donde coloco el 1    
+                    List<Integer> posiciones=s1.lugaresDisp();//donde se puede colocar fichas       
+                    for (int i=0; i < posiciones.size() ; i++) {
+                        EstadoMolino succ= new EstadoMolino();//genero un nuevo estado y seteo valores
+                        System.out.println("*********Creacion de succesor "+posiciones.get(i).intValue()+" Constructor Vacio :********* "+succ.toString());
+                        
+                        succ.setEstadoMolino2(2,posiciones.get(i).intValue(),s1.getVecino(),s1.getTablero(),s1.getCantFichas(),s1);
+                        System.out.println("************Seteo del Estado************** "+succ.toString());
+
+                        if (succ.esMolino()){ //entonces generar otra tipo de estado.
+                            System.out.println("Entre porq es Molino : NO HAGO NADA");
+                        /*    
+                        //permito borrar una ficha de su contrario
+                        //le asigno false a molino porque ya deja de ser molino.
+                           for (int k=0;k < fichasColocadas1.size() ; k++ ) {
+                                int posABorrar= fichasColocadas1.get(k).intValue();
+                                System.out.println("**********Ficha Eliminada*********: "+posABorrar);
+                                EstadoMolino aux= new EstadoMolino();//creo y hago backup con actualizaciones
+                                aux.setEstadoMolino3(2,posiciones.get(i).intValue(),posABorrar,s1.getVecino(),s1.getTablero(),s1.getCantFichas(),false,s1  );
+                                successors.add(aux);//agrego a la lista de sucesores    
+                                System.out.println("**********Estado creado a partir de esMolino************");
+                                System.out.println(aux.toString());
+                                System.out.println("***********************************************************");
+                            }*/                        
+                        }
+                        else{//si no es molino, agrego a la lista simplemente.
+                            System.out.println("No fue Molino : Solo agrego a la lista");
+                            System.out.println("************ Sucesor Obtenido : **************** ");
+                            System.out.println(succ.toString());
+                            successors.add(succ);
+                            System.out.println("---------------------------------------------------");
+                            System.out.println("");
+                            System.out.println("****************************************************");
+                            System.out.println("Padre S como queda? "+s.toString());
+                            System.out.println("***************************************************");
+                            System.out.println("PASA A OBTENER OTRO SUCESOR");
+                            
+                        }
+                        s1=s.clonarEstado();
+                    }
+                    posiciones.clear(); //Por las dudas
                     fichasColocadas1.clear();
                 }
             }    
@@ -92,65 +147,61 @@ public class ProblemaMolino implements AdversarySearchProblem<EstadoMolino>{
            // System.out.println(successors.toString());
             return successors;
         }
+
+
         
+        /*
         //Metodo para obtener los sucesores de un estado por colocacion de fichas
-        private List<EstadoMolino> succColocarFichas(int jugador,List<EstadoMolino> listSucc,List<Integer> dondeColoco, EstadoMolino suc, EstadoMolino s){
+        private List<EstadoMolino> succColocarFichas(int jugador,List<EstadoMolino> listSucc,List<Integer> dondeColoco, EstadoMolino suc,EstadoMolino backup ,EstadoMolino s){
             List<Integer> posiciones=s.lugaresDisp(); //guardo todos los lugares disponibles.
-            System.out.println("LUGARES disponibles "+posiciones.toString());
+            System.out.println("Posiciones disponibles para jugador "+jugador+" : "+posiciones.toString());
             //generar un estado sucesor a partir de poner una ficha de Max en cada posicion
             //teniendo en cuenta que en cada insercion, puede generar molino y permita
             //borrarle una ficha de su contrario.
-            //ACA HACER BACKUP DE VECINOS ANTES DE AGREGAR ALGO, PORQUE ES AGREGAR 1, LUEGO EN OTRO
-            //PERO SIN ESE 1 PRIMERO
-            //BACKUP
-            Vecinos vecino= s.getVecino();
-            Tablero tab= s.getTablero();
-            int cantFichas= s.getCantFichas();
-            EstadoMolino parent= s.getParent();
-            int player= s.getPlayer();
-            boolean molino=false;
+            //Vecinos vecino= s.getVecino();
+            //Tablero tab= s.getTablero();
+            //int cantFichas= s.getCantFichas();
+            //EstadoMolino parent= s.getParent();
+            //int player= s.getPlayer();
+            //boolean molino=false;
             //Fin de backup
-            EstadoMolino backup= s.clonarEstado();  
-            System.out.println("BACKUP FUNCIONA???? "+backup.getVecino().toString2());
-          
+           
             for (int i=0; i < posiciones.size() ; i++) {
-                System.out.println("SUCESOR "+posiciones.get(i));
-                //NO PUEDO CREAR ESTADOS SIN INICIALIZAR TABLERO Y VECINOS
-                //---- ARREGLAR PARA Q SE ACTUALIZEN ESTOS DIAS PERO CON EL TABLERO Y VECINOS Q VIENE Y DEMAS!!!!!
-                //EstadoMolino suc = new EstadoMolino();
-                //HACER UN SETEOESTADO2 , Y LOS GET TABLERO Y GET VECINO DE ESTADO
+                System.out.println(" Sucesor "+posiciones.get(i));
+              
                 suc.setEstadoMolino2(jugador,posiciones.get(i).intValue(),s.getVecino(),s.getTablero(),s.getCantFichas(),s);
-                System.out.println("VECINOS"+ s.getVecino().toString2()); 
-                System.out.println("ES MOLINO??? "+suc.esMolino());
+              
+                System.out.println("Vecinos "+ s.getVecino().toString2()); 
+                System.out.println("Es Molino? "+suc.esMolino());
                 if (suc.esMolino()){ //entonces generar otra tipo de estado.
                     //permito borrar una ficha de su contrario
                     //le asigno false a molino porque ya deja de ser molino.
-                    //ACA BORRAR UNA POR UNA LAS DEL CONTRARIO, VARIOS ESTADOS
                     for (int k=0;k < dondeColoco.size() ; k++ ) {
                         int posABorrar= dondeColoco.get(k).intValue();
                         EstadoMolino aux= new EstadoMolino();//creo y hago backup con actualizaciones
                         aux.setEstadoMolino3(jugador,posiciones.get(i).intValue(),posABorrar,s.getVecino(),s.getTablero(),s.getCantFichas(),false,s  );
                         listSucc.add(aux);//agrego a la lista de sucesores    
                     }                        
-                 }
-                 else{//si no es molino, agrego a la lista simplemente.
-                    System.out.println("NO FUE MOLINO ");
+                }
+                else{//si no es molino, agrego a la lista simplemente.
+                    System.out.println("No fue Molino : ");
                     //System.out.println("SUCESOR OBTENIDO COLOCAR FICHAS "+ suc.toString());
                     //System.out.println("-------------------------------------------------------------");
                     listSucc.add(suc);
-                 }
-                 s.setPlayer(player);
-                 s.setTablero(tab);
-                 s.setVecino(vecino);
-                 s.setCantFichas(cantFichas);
-                 s.setParent(parent);
-                 s.setMolino(molino);
-                 System.out.println("VECINO DE PADRE "+s.getVecino().toString2());
+                }
+                s=backup.clonarEstado();
+               // s.setPlayer(player);
+                //s.setTablero(tab);
+               // s.setVecino(vecino);
+               // s.setCantFichas(cantFichas);
+               // s.setParent(parent);
+                //s.setMolino(molino);
+                //System.out.println("VECINO DE PADRE "+s.getVecino().toString2());
                 System.out.println("PADRE RESETEADO"+s.toString());
             }
             posiciones.clear(); //Por las dudas
             return listSucc;
-        }
+        }*/
         //Metodo para obtener los sucesores de un estado por movimiento de fichas.
         private void succMoverFichas(int jugador,List<EstadoMolino> listSucc,List<Integer> dondeColoco,EstadoMolino s){
             //guardo la lista de (nodo,movimiento a que nodo);
