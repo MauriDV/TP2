@@ -11,6 +11,12 @@ import java.util.*;
 
 
 public class JuegoDelMolino{
+	
+	public JuegoDelMolino(){
+
+	}
+
+
 	public void partida() {
 		Scanner in = new Scanner(System.in);
 

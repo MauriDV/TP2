@@ -247,10 +247,10 @@ public class ProblemaMolino implements AdversarySearchProblem<EstadoMolino>{
         //Junto con maxValue (), se determina un intervalo en el que los
         // valores de los estados deben variar.
         public int minValue(){
-           return Integer.MIN_VALUE; 
+           return -1000; 
         }
         public int maxValue(){
-           return Integer.MAX_VALUE; 
+           return 1000; 
         }
 
 }
