@@ -66,6 +66,7 @@ public class EstadoMolino implements AdversarySearchState {
         parent=father;      
         this.esMolinoBool= vecino.esMolino(posNew,jug);//calcula si es molino
     }   
+  
     //Constructor para generar estados a partir de INSERCION DE FICHA Y ELIMINACION DE UNA DE
     //SU CONTRARIO
     public EstadoMolino(int jug,int posNew,int posABorrar,Vecinos vec, Tablero tabl, boolean molino,EstadoMolino father ){
@@ -140,28 +141,6 @@ public class EstadoMolino implements AdversarySearchState {
         this.esMolinoBool= molino;//calcula si es molino
     }
 
-    //SETS DE ESTADOS PARA COLOCAR FICHAS : SI NO GENERA MOLINO!!!
-    public void setEstadoMolino(int jug,Vecinos vec, Tablero tab,boolean molino,int cantF,EstadoMolino father){
-        tablero= new Tablero(7,7); //tablero 7x7 con sus operaciones
-        vecino= new Vecinos(24,24);//matriz ady 24x24
-        vecino.cargaVecino();//Carga la lista de ADYACENCIAS---VEEEEEEEEEEEEEEEEER EN LOS OTROSSSS
-        currentPlayer=1; //Comienza el jugador numero 1
-        //parent=null;//no tiene padre
-        esMolinoBool=false;//no existen molinos
-       
-        this.vecino= (Vecinos) vec;
-        this.tablero=(Tablero) tab;
-        if (jug==1) currentPlayer=2;//actualizo current jugador
-        if (jug==2) currentPlayer=1;
-        this.esMolinoBool=molino;
-        //this.parent=father;
-        
-    }
-//GENERAR UN ESTADO CONSTRUCTOR .y COPIAR PARA CADA ELEMENTO CADA COSA. que simule CLONAR() PERO CONSTRUYENDOLO!!!
-
-
-
-    
     //PARA MOVER FICHAS Y CALCULAR MOLINO!!!
     public EstadoMolino(int jug, int orig,int dest,Vecinos vec, Tablero tabl, EstadoMolino father){
         tablero= new Tablero(7,7); //tablero 7x7 con sus operaciones
@@ -322,8 +301,12 @@ public class EstadoMolino implements AdversarySearchState {
         }
         return nodoCantAdy;
     }  
-
-
+    //Dado un jugador retorna la cantidad de segmentos tomados de a 2 que tiene
+    //en el juego
+    public int segmentoDeA2 (int player){
+        return vecino.cantSegmentosDea2(player);
+    }
+    
 
     //Retorna la regla Aplicada para llegar this.Estado 
     //O quien es el padre de este estado. 

@@ -171,7 +171,8 @@ public class Vecinos {
 		List<Integer> visited = new LinkedList<Integer>();
 		//Analisis para nodos horizontales
 		int search=10; 
-		int i= dfs(nodo,search,visited,jugador);
+		int molino=3;
+		int i= dfs(nodo,search,visited,jugador,molino);
 		visited.clear();
         if (i==3){
         	//guardo los nodos que generaron el molino en este recorrido.
@@ -186,7 +187,7 @@ public class Vecinos {
 
 		//Analisis nodos verticales
 		search=20;
-		i=dfs(nodo,search,visited,jugador);
+		i=dfs(nodo,search,visited,jugador,molino);
 		visited.clear();
 		if (i==3){ 
 			molinos.addAll(molinoCurrent);
@@ -212,14 +213,14 @@ public class Vecinos {
 9                 marcamos como visitado w
 10                 insertamos w dentro de la pila S
 	*/
-	private int dfs(int nodo, int search,List<Integer> visited,int jug){
+	private int dfs(int nodo, int search,List<Integer> visited,int jug,int molino){
 		   	
 		   	Stack<Integer> pila = new Stack<Integer>();
     		pila.push(nodo);//apilo nodo origen 
     		visited.add(nodo);//marco visitado
     		int count=0;//inicializo contador.
     		while (!pila.isEmpty() ) {
-    			if (count!=3){
+    			if (count!=molino){ //count !=3
     				Integer current = pila.pop();//saco nodo de la pila ok
     				if (fichaJug[current.intValue()]==jug){ //si la posicion coincide con el jugador (1 o 2)
     					//la primera vez deberia coincidir
@@ -242,6 +243,31 @@ public class Vecinos {
 			}
    			return count;	
   	}
+  	//Dado un jugador retorna la cantidad de segmentos tomados de a 2 que tiene en el juego.
+  	//mirando la lista de adyacencias
+
+  	public int cantSegmentosDea2(int jugador){
+  		List<Integer> lugares = this.dondeColoco(jugador);//sacar todos los nodos del jugador
+  		int segmento=2; //busco segmentos de a 2.
+  		//busco por adyacentes horizontales primero.
+  		int search=10;//horizontales
+		int cant=0;//representa la cantidad de segmentos de a 2 obtenidos
+		
+		List<Integer> visited = new LinkedList<Integer>();
+
+		for (int i=0;i < lugares.size() ; i++ ) {
+			cant+=dfs(lugares.get(i).intValue(),search,visited,jugador,segmento);	
+		
+		}
+		//ademas le añado a cant los adyacentes verticales.
+		search=20;//verticales
+		for (int i=0 ;i <lugares.size() ;i++ ) {
+			cant+=dfs(lugares.get(i).intValue(),search,visited,jugador,segmento);	
+		}
+		return cant; 		
+  	}
+
+
 
   	//Dado un jugador 1 o 2, retorna la cantidad de fichas que tiene 
   	public int cantFichasJug(int jug){
