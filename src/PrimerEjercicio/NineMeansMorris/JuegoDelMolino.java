@@ -99,6 +99,7 @@ public class JuegoDelMolino{
 					pcState= engine.computeSuccessor(problem.initialState().clonarEstado());
 					problem= new ProblemaMolino(pcState);
 					
+					System.out.println( pcState.toString() );
 					vecino=problem.initialState().getVecino();
 					board= problem.initialState().getTablero();
 				}			
@@ -107,7 +108,7 @@ public class JuegoDelMolino{
 // Movimientos 
 
 			else{//COMIENZA JUEGO POR MOVIMIENTOS !!!
-				System.out.println("\n\t************COMIENZAN LOS MOVIMIENTOS*****************\n\t");
+				System.out.println("\n\t************REALIZAR MOVIMIENTOS*****************\n\t");
 				//MOVIMIENTOS DEL HUMANO
 				if (problem.initialState().isMax()){
 					

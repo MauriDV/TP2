@@ -89,20 +89,27 @@ public class MinMaxABEngine <P extends AdversarySearchProblem<State>, State exte
 		//System.out.println("");
 		//System.out.println(" *************************** Entre a computeSuccessor ****************************");
 		List<State> successors = problem.getSuccessors(state); //sucesores de state
-		//System.out.println("**********************************************************************************");
-		//System.out.println("");
-		//System.out.println("====== Pase la obtencion de sucesores !!! =========");
-		//System.out.println("Los sucesores obtenidos son = "+successors.toString());
 		List<Pair<Integer,State>> succValue = new LinkedList<Pair<Integer,State>>(); 
-		Pair<Integer,State> current= new Pair<Integer,State>();// (Int,State)
 		int i=0;
-		while (!successors.isEmpty()){
-			State st= successors.get(0); //obtengo state succesor
+		for (int k=0;k < successors.size() ;k++ ) {
+			State st = (State) successors.get(k); //obtengo state succesor
+			//System.out.println("Que estado agrega = Estado "+k+ " = "+st.toString());
 			i=computeValue(st); //computo MinMax para ese estado
-			current.setTwo(Integer.valueOf(i),st); //seteo el par con valores
+			//System.out.println("Que valor computa = "+i);
+			Pair<Integer,State> current= new Pair<Integer,State>(Integer.valueOf(i),st);// (Int,State)
 			succValue.add(current);//agrego a la lista de pares
-			successors.remove(0);//elimino el succesor para avanzar
-		}
+		}	
+		
+		////////////////////////////////---------------------------------
+		//System.out.println("");
+		//System.out.println("MUESTRO DE TODOS LOS ESTADOS CON SUS VALORES");
+		//System.out.println("");
+		//for (int j=0;j <succValue.size() ;j++ ) {
+		//	System.out.println("VALOR DE ESTADO "+succValue.get(0).getFst());
+		//	System.out.println("ESTADO FORMADO POR "+succValue.get(0).getSnd().toString()  );
+		//}
+        ////////////////////////////////----------------------------------
+
 		//Guardar el indice donde se encuentra Max 
 		int max=0;
 		i=0;
@@ -112,9 +119,9 @@ public class MinMaxABEngine <P extends AdversarySearchProblem<State>, State exte
 			}
 			i++;
 		}
-		System.out.println("");
-		System.out.println("El Mejor estado para la PC "+(succValue.get(max)).getSnd().toString());
-		System.out.println(" ");
+		//System.out.println("");
+		//System.out.println("EL ESTADO ELEGIDO Y MEJOR ES "+(succValue.get(max)).getSnd().toString() );
+		//System.out.println("Y SU VALOR ES "+(succValue.get(max)).getFst());
 		return (succValue.get(max)).getSnd(); //Retorno el estado mas prometedor.
 	}
 
