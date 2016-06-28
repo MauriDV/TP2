@@ -45,8 +45,7 @@ public class ProblemaMolino implements AdversarySearchProblem<EstadoMolino>{
             int numFichas=s1.getCantFichas();
                 
             if (s1.getCantFichas()<18){//COLOCACION DE FICHAS       
-              
-                
+                 
                 if (s1.isMax()){//jugador 1.
                      
                     List<Integer> fichasColocadas2 = s1.dondeColoco(2);//donde coloco el 2    
@@ -101,48 +100,27 @@ public class ProblemaMolino implements AdversarySearchProblem<EstadoMolino>{
                             }                        
                         }
                         else{//si no es molino, agrego a la lista simplemente.
-                            //System.out.println("No fue Molino : Solo agrego a la lista");
-                            //System.out.println("************ Sucesor Obtenido : **************** ");
-                            //System.out.println(succ.toString());
                             successors.add(succ);
-                            //System.out.println("---------------------------------------------------");
-                            //System.out.println("");
-                            //System.out.println("****************************************************");
-                            //System.out.println("Parametro : Padre S como queda? "+s.toString());
-                            //System.out.println("***************************************************");
-                            //System.out.println("");
-                            //System.out.println("PASA A OBTENER OTRO SUCESOR");
                             
                         }
                     }
                     posiciones.clear(); //Por las dudas
                     fichasColocadas1.clear();
                 }
-            }    
-            /*else{
-                System.out.println("ENTRA POR cantidad >=19");
+            } //Cierra IF si cantidadFichas < 18    
+            else{
                 //Si la cantidad es 19, obtener sucesores con respecto a realizar movidas de fichas.    
-                if (s.isMax()){//jugador1
-                   // System.out.println("-----JUGADOR 1 OBT SUCC");
-                    List<Integer> fichasColocadas2 = s.dondeColoco(2);
-                  //  System.out.println("Fichas colocadas por 2");
-                   // System.out.println(fichasColocadas2.toString());    
-                    succMoverFichas(1,successors,fichasColocadas2,s);
-                  //  System.out.println("SUCESORES A PARTIR DE 1");
-                   // System.out.println(successors.toString());
+                if (s1.isMax()){//jugador1
+                    List<Integer> fichasColocadas2 = s1.dondeColoco(2);
+                    succMoverFichas(1,successors,fichasColocadas2,s1);
                     fichasColocadas2.clear();
                 }
                 else{//jugador 2
-                 //   System.out.println("------JUGADOR 2 OBT SUCC");
-                    List<Integer> fichasColocadas1 = s.dondeColoco(1);
-                   // System.out.println("Fichas colocadas por 1");
-                   // System.out.println(fichasColocadas1.toString());
-                    succMoverFichas(2,successors,fichasColocadas1,s);
-                   // System.out.println("SUCESORES A PARTIR DE 2");
-                   // System.out.println(successors.toString());    
+                    List<Integer> fichasColocadas1 = s1.dondeColoco(1);
+                    succMoverFichas(2,successors,fichasColocadas1,s1);
                     fichasColocadas1.clear();
                 }
-            }*/
+            }
             //System.out.println("SUCESORES FINAL");
            // System.out.println(successors.toString());
             return successors;
@@ -202,6 +180,7 @@ public class ProblemaMolino implements AdversarySearchProblem<EstadoMolino>{
             posiciones.clear(); //Por las dudas
             return listSucc;
         }*/
+
         //Metodo para obtener los sucesores de un estado por movimiento de fichas.
         private void succMoverFichas(int jugador,List<EstadoMolino> listSucc,List<Integer> dondeColoco,EstadoMolino s){
             //guardo la lista de (nodo,movimiento a que nodo);
@@ -214,15 +193,13 @@ public class ProblemaMolino implements AdversarySearchProblem<EstadoMolino>{
                 int fst= current.getFst().intValue();
                 int snd= current.getSnd().intValue();
                 //creo un nuevo estado borrando el antiguo y moviendolo a su adyacente
-                EstadoMolino suc = new EstadoMolino();
-                suc.setEstadoMolino4(jugador,fst,snd,s.getVecino(),s.getTablero(),s.getCantFichas(),s);
+                EstadoMolino suc = new EstadoMolino(jugador,fst,snd,s.getVecino(),s.getTablero(),s);
                 if (suc.esMolino()){//si el estado generado es molino
                     //ACA BORRRAR UNA POR UNA LAS DEL CONTRARIO,Generando varios estados
                     for (int k=0;k <dondeColoco.size() ;k++ ) {
                         int posABorrar= dondeColoco.get(k).intValue();    
                         //generar un nuevo estado permitiendo borrar
-                        EstadoMolino aux= new EstadoMolino();
-                        aux.setEstadoMolino5(jugador,fst,snd,posABorrar,s.getVecino(),s.getTablero(),s.getCantFichas(),false,s);
+                        EstadoMolino aux= new EstadoMolino(jugador,fst,snd,posABorrar,s.getVecino(),s.getTablero(),false,s);
                         listSucc.add(aux);
                     }
                 }
@@ -238,6 +215,7 @@ public class ProblemaMolino implements AdversarySearchProblem<EstadoMolino>{
            return state.estadoFin(); 
         }
   
+        //(2X CANTFMAX + CANT2SeGMemtos de a 2)   -  (2XCANTFMIN + CANT2SGM) value() MEJORAR CON ESTO        
         //  tomar la diferencia entre la cantidad de piezas disponibles en el tablero de cada jugador, 
         //  ponderadas por el numero de casillas libres adyacentes a cada una
         public int value(EstadoMolino state){
@@ -278,4 +256,3 @@ public class ProblemaMolino implements AdversarySearchProblem<EstadoMolino>{
 }
 
 
-//(2X CANTFMAX + CANT2SGM)   -  (2XCANTFMIN + CANT2SGM) value()

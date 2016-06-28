@@ -63,7 +63,7 @@ public class EstadoMolino implements AdversarySearchState {
         if (jug==2) currentPlayer=1;
         //System.out.println("currentPlayer pasa a ser : "+jug);
         
-        
+        parent=father;      
         this.esMolinoBool= vecino.esMolino(posNew,jug);//calcula si es molino
     }   
     //Constructor para generar estados a partir de INSERCION DE FICHA Y ELIMINACION DE UNA DE
@@ -100,7 +100,7 @@ public class EstadoMolino implements AdversarySearchState {
         if (jug==2) currentPlayer=1;
         //this.parent=father;//Identifica de que estado viene
         esMolinoBool=molino;
-        
+        parent=father;
     }
     
 
@@ -136,7 +136,7 @@ public class EstadoMolino implements AdversarySearchState {
         if (jug==1) currentPlayer=2;//actualizo current jugador
         if (jug==2) currentPlayer=1;
         //System.out.println("currentPlayer pasa a ser : "+jug);
-        
+        parent=father;
         this.esMolinoBool= molino;//calcula si es molino
     }
 
@@ -163,27 +163,68 @@ public class EstadoMolino implements AdversarySearchState {
 
     
     //PARA MOVER FICHAS Y CALCULAR MOLINO!!!
-    public void setEstadoMolino4(int jug, int orig,int dest,Vecinos vec, Tablero tab, int cantF, EstadoMolino father){
+    public EstadoMolino(int jug, int orig,int dest,Vecinos vec, Tablero tabl, EstadoMolino father){
+        tablero= new Tablero(7,7); //tablero 7x7 con sus operaciones
         vecino= new Vecinos(24,24);//matriz ady 24x24
-        vecino.cargaVecino();//Carga la lista de ADYACENCIAS---VEEEEEEEEEEEEEEEEER EN LOS OTROSSSS
-        this.vecino=vec; //backup
-        this.tablero=tab;
+        vecino.cargaVecino();//
+        //-------------- CLONACION ------------------------
+        //pasar lo de vec a vecinos 
+        for (int f=0;f<vec.fila ; f++) {
+            for (int c=0;c<vec.col ;c++ ) {
+                vecino.adyacencia[f][c]=vec.adyacencia[f][c];
+            }
+        }
+        //pasar jugadas
+        for (int i=0; i<vec.fichaJug.length;i++ ) {
+            vecino.fichaJug[i]=vec.fichaJug[i];
+        }
+        //paso cantidad historial de fichas.
+        vecino.fichas=vec.fichas;
+        //Paso la informacion del tablero (Para toString())
+        for (int f=0;f<tabl.fila ;f++ ) {
+            for (int c=0;c<tabl.col ;c++ ) {
+                tablero.tab[f][c]=tabl.tab[f][c];
+            }
+        }
+          
+        //tratamiento de movimiento de ficha
+
         vecino.borraFicha(orig);//borro la ficha seleccionada
         vecino.setFicha(jug,dest);//la muevo a algun adyacente desocupado
         tablero.refreshTab(vecino);//actualizo el tablero
+        
         if (jug==1) currentPlayer=2;//actualizo current jugador
         if (jug==2) currentPlayer=1;
         //this.parent=father;//actualizo padre
         esMolinoBool=vecino.esMolino(dest,jug);//si genero molino el movimiento
     
     }
+   
     //POR MOVIMIENTO DE FICHAS Y YA GENERO MOLINO
-    public void setEstadoMolino5(int jug, int orig,int dest,int posABorrar,Vecinos vec, Tablero tab, int cantF, boolean molino, EstadoMolino father){
+    public EstadoMolino(int jug, int orig,int dest,int posABorrar,Vecinos vec, Tablero tabl, boolean molino, EstadoMolino father){
+       tablero= new Tablero(7,7); //tablero 7x7 con sus operaciones
         vecino= new Vecinos(24,24);//matriz ady 24x24
-        vecino.cargaVecino();//Carga la lista de ADYACENCIAS---VEEEEEEEEEEEEEEEEER EN LOS OTROSSSS
-        this.vecino=vec; //backup
-        this.tablero=tab;
-        
+        vecino.cargaVecino();//
+        //-------------- CLONACION ------------------------
+        //pasar lo de vec a vecinos 
+        for (int f=0;f<vec.fila ; f++) {
+            for (int c=0;c<vec.col ;c++ ) {
+                vecino.adyacencia[f][c]=vec.adyacencia[f][c];
+            }
+        }
+        //pasar jugadas
+        for (int i=0; i<vec.fichaJug.length;i++ ) {
+            vecino.fichaJug[i]=vec.fichaJug[i];
+        }
+        //paso cantidad historial de fichas.
+        vecino.fichas=vec.fichas;
+        //Paso la informacion del tablero (Para toString())
+        for (int f=0;f<tabl.fila ;f++ ) {
+            for (int c=0;c<tabl.col ;c++ ) {
+                tablero.tab[f][c]=tabl.tab[f][c];
+            }
+        }
+        //tratamiento de movimiento de fichas y eliminacion
         vecino.borraFicha(posABorrar);//borro la ficha seleccionada del contrario
         vecino.borraFicha(orig);//borro la ficha vieja
         vecino.setFicha(jug,dest);//la muevo a algun adyacente desocupado
