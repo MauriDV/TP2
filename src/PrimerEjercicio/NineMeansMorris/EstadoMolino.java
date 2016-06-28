@@ -15,6 +15,8 @@ public class EstadoMolino implements AdversarySearchState {
 	private Tablero tablero; //instancia de la clase Tablero
     public Vecinos vecino; //instancia de la clase Vecinos
 	public boolean esMolinoBool;//Almacena el valor de verdad si el estado es o no molino.
+
+//-------------------------CONSTRUCTORES SEGUN SU UTILIDAD ---------------------------------
     
     //Constructor de EstadoMolino para el Estado inicial
 	public EstadoMolino(){
@@ -28,10 +30,9 @@ public class EstadoMolino implements AdversarySearchState {
         
         
     }
+
     //Constructor que se basa en clonar, para evitar problemas de memoria.
-    //Insercion de una ficha y se fija si es molino. VER Q EL HISTORIAL DE CANTIDAD DE FICHAS FUNCIONE
-    //int jug,int posNew,Vecinos vec,Tablero tab,int cantF,EstadoMolino father
-	
+    //Insercion de una ficha y se fija si es molino.
     public EstadoMolino(int jug,int posNew,Vecinos vec, Tablero tabl,EstadoMolino father){
         tablero= new Tablero(7,7); //tablero 7x7 con sus operaciones
         vecino= new Vecinos(24,24);//matriz ady 24x24
@@ -66,9 +67,8 @@ public class EstadoMolino implements AdversarySearchState {
         parent=father;      
         this.esMolinoBool= vecino.esMolino(posNew,jug);//calcula si es molino
     }   
-  
-    //Constructor para generar estados a partir de INSERCION DE FICHA Y ELIMINACION DE UNA DE
-    //SU CONTRARIO
+      //Constructor para generar estados a partir de INSERCION DE FICHA Y ELIMINACION DE UNA DE
+     //SU CONTRARIO
     public EstadoMolino(int jug,int posNew,int posABorrar,Vecinos vec, Tablero tabl, boolean molino,EstadoMolino father ){
         tablero= new Tablero(7,7); //tablero 7x7 con sus operaciones    
         vecino= new Vecinos(24,24);//matriz ady 24x24
@@ -99,13 +99,12 @@ public class EstadoMolino implements AdversarySearchState {
         tablero.refreshTab(vecino);//actualiza el tablero
         if (jug==1) currentPlayer=2;
         if (jug==2) currentPlayer=1;
-        //this.parent=father;//Identifica de que estado viene
+        this.parent=father;//Identifica de que estado viene
         esMolinoBool=molino;
         parent=father;
     }
     
 
-    //1,vecino,board,false,problem.initialState().getCantFichas(),problem.initialState()
     //Para generacion de estados a partir de toda la informacion y ademas de cuantas fichas se actualizan
     public EstadoMolino(int jug,Vecinos vec, Tablero tabl,boolean molino,EstadoMolino father){
         tablero= new Tablero(7,7); //tablero 7x7 con sus operaciones
@@ -133,10 +132,9 @@ public class EstadoMolino implements AdversarySearchState {
         
         //El vecino ya fue seteado afuera, asi que solo actualizo el tablero
         tablero.refreshTab(vecino);
-        //System.out.println("EstadoMolino: Constructor: Luego de Actualizacion como que vecino :"+vecino.toString2());
         if (jug==1) currentPlayer=2;//actualizo current jugador
         if (jug==2) currentPlayer=1;
-        //System.out.println("currentPlayer pasa a ser : "+jug);
+        
         parent=father;
         this.esMolinoBool= molino;//calcula si es molino
     }
@@ -174,7 +172,7 @@ public class EstadoMolino implements AdversarySearchState {
         
         if (jug==1) currentPlayer=2;//actualizo current jugador
         if (jug==2) currentPlayer=1;
-        //this.parent=father;//actualizo padre
+        this.parent=father;//actualizo padre
         esMolinoBool=vecino.esMolino(dest,jug);//si genero molino el movimiento
     
     }
@@ -210,26 +208,39 @@ public class EstadoMolino implements AdversarySearchState {
         tablero.refreshTab(vecino);//actualizo el tablero
         if (jug==1) currentPlayer=2;//actualizo current jugador
         if (jug==2) currentPlayer=1;
-        //this.parent=father;//actualizo padre
+        this.parent=father;//actualizo padre
         esMolinoBool=molino;
 
     }
-
+//----------------------------- FIN DE CONSTRUCTORES 
     
-//Usar estas para la construccion de estados a partir de seteos
+// GETS
+    //retorna la clase vecinos de la clase
     public Vecinos getVecino(){
         return this.vecino;
     }
+    //retorna la clase tablero de la clase.
     public Tablero getTablero(){
         return this.tablero;
     }
+    //retorna el padre de la clase.
     public EstadoMolino getParent(){
         return this.parent;
     }
+    //Historial de cantida de fichas
     public int getCantFichas(){
         return this.vecino.cantFichas();
     }
-    
+    //retorna el jugador corriente
+    public int getPlayer(){
+        return currentPlayer;
+    }
+    //retorna el tablero corriente
+    public int[][] getTab(){
+        return tablero.getTab();
+    }
+
+//Clonar un estado    
     public EstadoMolino clonarEstado(){
         EstadoMolino clone= new EstadoMolino();
         clone.currentPlayer=this.getPlayer();; //Jug1 = 1, Jug2= 2
@@ -247,14 +258,7 @@ public class EstadoMolino implements AdversarySearchState {
 		return (currentPlayer==1);
 	}
 	
-    //retorna el jugador corriente
-	public int getPlayer(){
-		return currentPlayer;
-	}
-	//retorna el tablero corriente
-    public int[][] getTab(){
-        return tablero.getTab();
-    }
+    
     //Retorna si dos estados son iguales, 
 	//Para que sean iguales, deben tener los mismos tableros,
 	//mismas componentes y debe estar jugando el mismo jugador. 
@@ -317,7 +321,7 @@ public class EstadoMolino implements AdversarySearchState {
     Un jugador gana si consigue que su oponente quede con menos de tres piezas,
     o no pueda realizar movimientos.
     */
-    public boolean estadoFin(){ //ESTADO FINAL ANALIZAR MEJOR
+    public boolean estadoFin(){ 
         return vecino.win();   
     }
     //Quien gano en this.estado

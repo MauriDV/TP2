@@ -17,7 +17,7 @@ public class JuegoDelMolino{
 	}
 
 
-	public void partida() {
+	public void partida () {
 		Scanner in = new Scanner(System.in);
 
 		ProblemaMolino problem = new ProblemaMolino();
@@ -35,15 +35,15 @@ public class JuegoDelMolino{
 
 		System.out.println("\n\t------------ COMIENZO DEL JUEGO -------------------\n\t");
 		boolean salir=false;
-		while( ! (problem.end( problem.initialState()) && (!salir) ) ){
+		while( ! (problem.end( problem.initialState() ) ) ) {
 //-----------------------------------------------------------
 //			Colocacion de fichas
 
 			if (problem.initialState().getCantFichas()<18){//Juego por Insercion de fichas
 				System.out.println("Cantidad de Fichas Colocadas = "+problem.initialState().getCantFichas());
+			    //----------------------------------------------------------------------------
 				if ( problem.initialState().isMax() ){//Si es el jugador 1=Humano  
-					
-					//----------------------------------------------------------------------------
+								
 					System.out.println("\n\t **************** JUEGA JUGADOR 1 ****************\n\t");
 					System.out.println("\n\tElija una posicion de 00 a 23 NO OCUPADA y presione ENTER \n\t");
 					Integer jugada = in.nextInt(); //Lectura de datos desde terminal de la jugada
@@ -165,7 +165,7 @@ public class JuegoDelMolino{
 						List<Integer> fichasContrarias = vecino.dondeColoco(2);
 						System.out.println(fichasContrarias.toString());
 						
-						//VERIFICAR ACA SI ES UNA FICHA VALIDA A BORRAR
+						//VERIFICA SI ES UNA FICHA VALIDA A BORRAR
 						while(!fichasContrarias.contains(fichaElim)){
 							System.out.println("\n\tELIJA UNA FICHA VALIDA QUE DESEA BORRAR :\n\t");
 							fichaElim=in.nextInt();
@@ -197,8 +197,9 @@ public class JuegoDelMolino{
 		}//FIN DE WHILE PRINCIPAL
 		
 		if (problem.end(problem.initialState()  ) ){
-
+			System.out.println("*****************************************************************");
     		System.out.println("\n\t  **** GANADOR DE LA PARTIDA **** : PLAYER "+problem.initialState().whosWin()+"!!! \n\t");
+			System.out.println("******************************************************************");
 		}	
 	}
 
